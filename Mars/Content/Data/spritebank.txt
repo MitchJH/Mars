@@ -1,0 +1,5 @@
+# ID, Filepath
+crew,Textures/person
+bed1,Textures/bed1
+bed2,Textures/bed2
+bed3,Textures/bed3
