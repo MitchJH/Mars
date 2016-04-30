@@ -20,8 +20,8 @@ namespace Mars
         private static List<GameObject> _objects;
         private static List<Building> _buildings;
         private static Planet _planet;
-
-        //REMOVE
+     
+        //REMOVE //TEST
         private bool active_selection = false;
         Texture2D tile_texture;
         Texture2D iso_texture;
@@ -40,6 +40,8 @@ namespace Mars
             tile_texture = content.Load<Texture2D>("Textures/tile");
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
+            _crewMembers.Add(new CrewMember("darren", 23, 800, 1500, "crew"));
+            
         }
 
         public void ClearGrid()
@@ -225,12 +227,12 @@ namespace Mars
                     {
                         Tile tile = World.Tiles[x, y];
 
-                        double xx = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
-                        double yy = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
+                        double tile_pos_x = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
+                        double tile_pos_y = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
 
                         Rectangle rec = new Rectangle(
-                                    (int)xx,
-                                    (int)yy + Constants.TILE_DEPTH,
+                                    (int)tile_pos_x,
+                                    (int)tile_pos_y + Constants.TILE_DEPTH,
                                     Constants.TILE_WIDTH,
                                     Constants.TILE_WIDTH + Constants.TILE_DEPTH);
 
@@ -261,6 +263,24 @@ namespace Mars
                         //spriteBatch.DrawString(Fonts.Standard, xx + ":" + yy, new Vector2(rec.X, rec.Y+(Constants.TILE_WIDTH/2)), Color.White);
                     }
                 }
+
+
+                //REMOVE
+
+
+                double tile_pos_x2 = _crewMembers[0].Position.X / 2 - _crewMembers[0].Position.Y / 2;
+                double tile_pos_y2 = _crewMembers[0].Position.X / 2 + _crewMembers[0].Position.Y / 2;
+
+                Rectangle rec2 = new Rectangle(
+                            (int)tile_pos_x2,
+                            (int)tile_pos_y2 + Constants.TILE_DEPTH,
+                            Constants.TILE_WIDTH,
+                            Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+
+                spriteBatch.Draw(Sprites.Get("crew"), rec2, Color.White);
+
+               
+
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
