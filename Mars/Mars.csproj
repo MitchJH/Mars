@@ -51,7 +51,7 @@
     <NoWarn>CS0414</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="Framework\GUI\TextBox.cs" />
     <Compile Include="Framework\Localization.cs" />
     <Compile Include="Framework\Menus\MainMenu.cs" />
+    <Compile Include="Framework\Menus\WorldUI.cs" />
     <Compile Include="Framework\Pathfinding\PriorityQueue.cs" />
     <Compile Include="Framework\Pathfinding\SpatialAStar.cs" />
     <Compile Include="Framework\Primitives2D.cs" />
@@ -113,7 +114,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Icon.ico" />
     <Content Include="Content\Audio\click.wav" />
     <Content Include="Content\Audio\high_beep.wav" />
     <Content Include="Content\Audio\high_double_beep.wav" />
@@ -146,9 +146,18 @@
     <Content Include="Content\Textures\sand.png" />
     <Content Include="Content\Textures\tile.png" />
     <Content Include="Content\Textures\UI\button.png" />
+    <Content Include="Content\Textures\UI\Buttons\build.png" />
+    <Content Include="Content\Textures\UI\Buttons\music_toggle.png" />
+    <Content Include="Content\Textures\UI\Buttons\music_toggle_off.png" />
+    <Content Include="Content\Textures\UI\Buttons\pipe.png" />
+    <Content Include="Content\Textures\UI\Buttons\sfx_toggle.png" />
+    <Content Include="Content\Textures\UI\Buttons\sfx_toggle_off.png" />
+    <Content Include="Content\Textures\UI\Buttons\square.png" />
+    <Content Include="Content\Textures\UI\Buttons\wire.png" />
     <Content Include="Content\Textures\UI\mars_bg.png" />
     <Content Include="Content\Textures\UI\mars_bg_f.png" />
     <Content Include="Content\Textures\UI\menu.png" />
+    <Content Include="Game.ico" />
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

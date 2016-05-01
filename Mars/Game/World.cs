@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Mars
 {
@@ -14,12 +18,13 @@ namespace Mars
     /// </summary>
     public class World
     {
-        private static Tile[,] _tiles;
-        private static Clock _clock;
-        private static List<CrewMember> _crewMembers;
-        private static List<GameObject> _objects;
-        private static List<Building> _buildings;
-        private static Planet _planet;
+        private WorldUI UI;
+        private Tile[,] _tiles;
+        private Clock _clock;
+        private List<CrewMember> _crewMembers;
+        private List<GameObject> _objects;
+        private List<Building> _buildings;
+        private  Planet _planet;
      
         //REMOVE //TEST
         private bool active_selection = false;
@@ -27,8 +32,10 @@ namespace Mars
         Texture2D iso_texture;
         Texture2D iso_texture_wall;
 
+        public World() { }
         public World(ContentManager content)
         {
+            UI = new WorldUI(content);
             _tiles = new Tile[Constants.MAP_WIDTH, Constants.MAP_HEIGHT];
             _clock = new Clock();
             _crewMembers = new List<CrewMember>();
@@ -41,26 +48,14 @@ namespace Mars
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
             _crewMembers.Add(new CrewMember("darren", 23, 800, 1500, "crew"));
-            
-        }
-
-        public void ClearGrid()
-        {
-            for (int x = 0; x < Constants.MAP_WIDTH; x++)
-            {
-                for (int y = 0; y < Constants.MAP_HEIGHT; y++)
-                {
-                    _tiles[x, y] = new Tile(x, y);
-                    _tiles[x, y].Type = TileType.Passable;
-                }
-            }
         }
 
         public void Update(GameTime gameTime)
         {
             Camera.Update(gameTime);
-            World.Clock.Update(gameTime);
+            _clock.Update(gameTime);
             EntityCollider.Collide(gameTime);
+            UI.Update();
 
             if (Controls.Mouse.IsInCameraView()) // Don't do anything with the mouse if it's not in our cameras viewport.
             {
@@ -107,14 +102,14 @@ namespace Mars
                 }
 
                 //Update crew in real time.
-                foreach (CrewMember c in World.CrewMembers)
+                foreach (CrewMember c in _crewMembers)
                 {
                     c.Update(gameTime);
                 }
 
                 if (Controls.Mouse.LeftButton == ButtonState.Pressed && Controls.MouseOld.LeftButton == ButtonState.Released)
                 {
-                    foreach (CrewMember c in World.CrewMembers)
+                    foreach (CrewMember c in _crewMembers)
                     {
                         //If the mouseposition is within the textures bounds of a crew member...
                         //This could be done radius based instead of texture bounds based to make it simpler, but might not work then for long rectangular objects such as solar panels or something.
@@ -123,7 +118,7 @@ namespace Mars
                             if (mousePosition.Y > c.Position.Y - (Sprites.MISSING_TEXTURE.Bounds.Height / 2) && mousePosition.Y < c.Position.Y + (Sprites.MISSING_TEXTURE.Bounds.Height / 2))
                             {
                                 //deselect any crew that are already selected.
-                                foreach (CrewMember cm in World.CrewMembers)
+                                foreach (CrewMember cm in _crewMembers)
                                 {
                                     if (cm.Selected)
                                     {
@@ -146,7 +141,7 @@ namespace Mars
                 {
                     if (active_selection)
                     {
-                        foreach (CrewMember cm in World.CrewMembers)
+                        foreach (CrewMember cm in _crewMembers)
                         {
                             if (cm.Selected)
                             {
@@ -154,7 +149,7 @@ namespace Mars
                                 Point destination = Controls.GameMousePosition.ToPoint();
                                 Console.WriteLine("Generating Path from point (" + start_location.X + "," + start_location.Y + ") to point (" + destination.X + "," + destination.Y + ")");
 
-                                LinkedList<Tile> path = World.FindPath(start_location, destination);
+                                LinkedList<Tile> path = FindPath(start_location, destination);
                                 cm.DeterminePath(path);
                             }
                         }
@@ -182,7 +177,7 @@ namespace Mars
                 {
                     for (int y = 0; y < Constants.MAP_HEIGHT; y++)
                     {
-                        Tile tile = World.Tiles[x, y];
+                        Tile tile = _tiles[x, y];
 
                         double xx = x * Constants.TILE_HEIGHT;
                         double yy = y * Constants.TILE_HEIGHT;
@@ -225,7 +220,7 @@ namespace Mars
                 {
                     for (int y = 0; y < Constants.MAP_HEIGHT; y++)
                     {
-                        Tile tile = World.Tiles[x, y];
+                        Tile tile = _tiles[x, y];
 
                         double tile_pos_x = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
                         double tile_pos_y = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
@@ -263,24 +258,6 @@ namespace Mars
                         //spriteBatch.DrawString(Fonts.Standard, xx + ":" + yy, new Vector2(rec.X, rec.Y+(Constants.TILE_WIDTH/2)), Color.White);
                     }
                 }
-
-
-                //REMOVE
-
-
-                double tile_pos_x2 = _crewMembers[0].Position.X / 2 - _crewMembers[0].Position.Y / 2;
-                double tile_pos_y2 = _crewMembers[0].Position.X / 2 + _crewMembers[0].Position.Y / 2;
-
-                Rectangle rec2 = new Rectangle(
-                            (int)tile_pos_x2,
-                            (int)tile_pos_y2 + Constants.TILE_DEPTH,
-                            Constants.TILE_WIDTH,
-                            Constants.TILE_WIDTH + Constants.TILE_DEPTH);
-
-                spriteBatch.Draw(Sprites.Get("crew"), rec2, Color.White);
-
-               
-
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
@@ -295,7 +272,7 @@ namespace Mars
 
                     for (int x = 0; x < Constants.MAP_WIDTH; x++)
                     {
-                        Tile tile = World.Tiles[x, y];
+                        Tile tile = _tiles[x, y];
 
                         Rectangle rec = new Rectangle(
                                     (x * Constants.TILE_WIDTH) + rowOffset,
@@ -330,6 +307,22 @@ namespace Mars
             }
 
             spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            UI.Draw(spriteBatch);
+            spriteBatch.End();
+        }
+        
+        public void ClearGrid()
+        {
+            for (int x = 0; x < Constants.MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < Constants.MAP_HEIGHT; y++)
+                {
+                    _tiles[x, y] = new Tile(x, y);
+                    _tiles[x, y].Type = TileType.Passable;
+                }
+            }
         }
 
         /// <summary>
@@ -340,7 +333,7 @@ namespace Mars
         /// <param name="extraContext">Optional: Allows the passing of extra information to the IsWalkable function in the Tile object
         /// thus allowing a tile to be walkable for different entities by only changing input parameters rather than gamestate</param>
         /// <returns>A linked list of Tile objects that is the best path between the start and end tiles</returns>
-        public static LinkedList<Tile> FindPath(Point start, Point end, Object extraContext = null)
+        public LinkedList<Tile> FindPath(Point start, Point end, Object extraContext = null)
         {
             if (start.X < 0 || start.Y < 0 || end.X < 0 || end.Y < 0)
             {
@@ -363,7 +356,7 @@ namespace Mars
             return culledPath;
         }
 
-        private static LinkedList<Tile> CullPath(LinkedList<Tile> path)
+        private LinkedList<Tile> CullPath(LinkedList<Tile> path)
         {
             LinkedList<Tile> culledPath = new LinkedList<Tile>(path);
 
@@ -391,14 +384,14 @@ namespace Mars
             return culledPath;
         }
 
-        private static bool CanMoveBetweenTiles(Tile start, Tile end)
+        private bool CanMoveBetweenTiles(Tile start, Tile end)
         {
             List<Vector2> hits = BresenhamLine(start.Center, end.Center);
             return (hits.Count == 0);
         }
 
         // Returns the list of points between two Vector positions
-        private static List<Vector2> BresenhamLine(Vector2 start, Vector2 end)
+        private List<Vector2> BresenhamLine(Vector2 start, Vector2 end)
         {
             int x0 = (int)start.X;
             int y0 = (int)start.Y;
@@ -451,12 +444,12 @@ namespace Mars
 
             return result;
         }
-        private static void Swap<T>(ref T a, ref T b)
+        private void Swap<T>(ref T a, ref T b)
         {
             T c = a; a = b; b = c;
         }
 
-        private static Tile TileFromCoordinate(float x, float y)
+        private Tile TileFromCoordinate(float x, float y)
         {
             int x_t = (int)(x / Constants.TILE_WIDTH);
             int y_t = (int)(y / Constants.TILE_WIDTH);
@@ -464,37 +457,37 @@ namespace Mars
         }
 
         // Properties
-        public static Tile[,] Tiles
+        public Tile[,] Tiles
         {
             get { return _tiles; }
             set { _tiles = value; }
         }
 
-        public static Clock Clock
+        public Clock Clock
         {
             get { return _clock; }
             set { _clock = value; }
         }
 
-        public static List<CrewMember> CrewMembers
+        public List<CrewMember> CrewMembers
         {
             get { return _crewMembers; }
             set { _crewMembers = value; }
         }
 
-        public static List<GameObject> Objects
+        public List<GameObject> Objects
         {
             get { return _objects; }
             set { _objects = value; }
         }
 
-        public static List<Building> Buildings
+        public List<Building> Buildings
         {
-            get { return World._buildings; }
-            set { World._buildings = value; }
+            get { return _buildings; }
+            set { _buildings = value; }
         }
 
-        public static Planet Planet
+        public Planet Planet
         {
             get { return _planet; }
             set { _planet = value; }

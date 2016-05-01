@@ -49,12 +49,12 @@ namespace Mars
         /// </summary>
         /// <param name="mouseState">Current mouse state</param>
         /// <param name="keyboardState">Current keyboard state</param>
-        public override void Update(MouseState mouseState, KeyboardState keyboardState)
+        public override void Update()
         {
             // A checkBox has only two sprites
             if (texture != null) sourceRectangle = new Rectangle(0, (bChecked ? texture.Height / 2 : 0), texture.Width, texture.Height / 2);
 
-            base.Update(mouseState, keyboardState);
+            base.Update();
         }
 
         #endregion

@@ -60,6 +60,8 @@ namespace Mars
         /// <returns>True if sound was found and played</returns>
         public static bool PlaySoundEffect(string key)
         {
+            if (Settings.EffectsOn == false) return false;
+
             if (string.IsNullOrEmpty(key) == false)
             {
                 if (_sounds.ContainsKey(key))
@@ -76,6 +78,8 @@ namespace Mars
 
         public static bool PlayMusicTrack(string key)
         {
+            if (Settings.MusicOn == false) return false;
+
             if (string.IsNullOrEmpty(key) == false)
             {
                 if (_music.ContainsKey(key))
@@ -99,6 +103,11 @@ namespace Mars
                 }
             }
             return _MISSING_AUDIO;
+        }
+
+        public static void StopMusic()
+        {
+            MediaPlayer.Stop();
         }
 
         private static float ApplyMasterVolume(float otherVolume)

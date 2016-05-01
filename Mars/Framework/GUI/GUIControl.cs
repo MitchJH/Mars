@@ -105,7 +105,7 @@ namespace Mars
         /// </summary>
         /// <param name="mouseState">Current mouse state</param>
         /// <param name="keyboardState">Current keyboard state</param>
-        public virtual void Update(MouseState mouseState, KeyboardState keyboardState)
+        public virtual void Update()
         {
             if (!enabled || !visible) return;
 
@@ -115,7 +115,7 @@ namespace Mars
             mouseOver = false;
             mouseMoved = false;
 
-            if (CheckMouseInside(mouseState.X, mouseState.Y) && CheckMouseInsideParent(mouseState.X, mouseState.Y))
+            if (CheckMouseInside(Controls.Mouse.X, Controls.Mouse.Y) && CheckMouseInsideParent(Controls.Mouse.X, Controls.Mouse.Y))
             {
                 // MouseEntered event
                 if (!mouseLastIn && enableOnMouseEnter && onMouseEnter != null) onMouseEnter(this);
@@ -123,7 +123,7 @@ namespace Mars
                 mouseOver = true;
 
                 // if mouse moved since last frame
-                if (mouseState.X != prevMouseState.X || mouseState.Y != prevMouseState.Y)
+                if (Controls.Mouse.X != prevMouseState.X || Controls.Mouse.Y != prevMouseState.Y)
                 {
                     mouseMoved = true;
                     if (enableOnMouseMove && onMouseMove != null) onMouseMove(this);
@@ -134,10 +134,10 @@ namespace Mars
                 // MouseLeave event
                 if (mouseLastIn && enableOnMouseLeave && onMouseLeave != null) onMouseLeave(this);
 
-                if (mouseState.LeftButton == ButtonState.Released) mouseDown = false;
+                if (Controls.Mouse.LeftButton == ButtonState.Released) mouseDown = false;
             }
 
-            if (mouseOver && mouseDown && mouseState.LeftButton == ButtonState.Released)
+            if (mouseOver && mouseDown && Controls.Mouse.LeftButton == ButtonState.Released)
             {
                 mouseDown = false;
                 wasReleased = false;
@@ -149,7 +149,7 @@ namespace Mars
                 if (enableOnClick && onClick != null) onClick(this);
             }
 
-            if (readyForMouseDown && wasReleased && mouseOver && mouseState.LeftButton == ButtonState.Pressed)
+            if (readyForMouseDown && wasReleased && mouseOver && Controls.Mouse.LeftButton == ButtonState.Pressed)
             {
                 mouseDown = true;
                 wasReleased = false;
@@ -158,15 +158,15 @@ namespace Mars
                 if (enableOnMouseDown && onMouseDown != null) onMouseDown(this);
             }
 
-            if (mouseOver && mouseState.LeftButton == ButtonState.Released)
+            if (mouseOver && Controls.Mouse.LeftButton == ButtonState.Released)
                 readyForMouseDown = true;
             else
                 readyForMouseDown = false;
 
-            if (mouseState.LeftButton == ButtonState.Released) wasReleased = true;
+            if (Controls.Mouse.LeftButton == ButtonState.Released) wasReleased = true;
 
             mouseLastIn = mouseOver;
-            prevMouseState = mouseState;
+            prevMouseState = Controls.Mouse;
         }
 
         /// <summary>
@@ -545,6 +545,21 @@ namespace Mars
             set
             {
                 textPosition = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Texture of the control.
+        /// </summary>
+        public Texture2D Texture
+        {
+            get
+            {
+                return texture;
+            }
+            set
+            {
+                texture = value;
             }
         }
 
