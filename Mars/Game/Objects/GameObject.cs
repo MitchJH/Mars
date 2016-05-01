@@ -33,12 +33,12 @@ namespace Mars
             {
                 while (x > 0)
                 {
-                    World.Tiles[((int)this.TilePosition.X - 1) + x, ((int)this.TilePosition.Y - 1) + y].Type = TileType.Impassable;
+                    GameStateManager.ENGINE.WORLD.Tiles[((int)this.TilePosition.X - 1) + x, ((int)this.TilePosition.Y - 1) + y].Type = TileType.Impassable;
                     x--;
                 }
                 x = (int)_objectType.Width;
 
-                World.Tiles[((int)this.TilePosition.X - 1) + x, ((int)this.TilePosition.Y - 1) + y].Type = TileType.Impassable;
+                GameStateManager.ENGINE.WORLD.Tiles[((int)this.TilePosition.X - 1) + x, ((int)this.TilePosition.Y - 1) + y].Type = TileType.Impassable;
 
                 y--;
             }

@@ -127,7 +127,7 @@ namespace Mars
                 this.Window.Title = "DEBUG - " +
                     "(Mouse: " + (int)Controls.GameMousePosition.X + ":" + (int)Controls.GameMousePosition.Y + ") " +
                     "(Camera : X:" + Camera.Position.X.ToString("N2") + ", Y:" + Camera.Position.Y.ToString("N2") + ", Zoom:" + Camera.Zoom.ToString("N3") + ") " +
-                    "(" + World.Clock.DebugText + ")";
+                    "(" + WORLD.Clock.DebugText + ")";
             }
             else if (GameStateManager.State == GameState.MainMenu)
             {

@@ -80,7 +80,7 @@ namespace Mars
         /// </summary>
         /// <param name="mouseState">Current mouse state</param>
         /// <param name="keyboardState">Current keyboard state</param>
-        public override void Update(MouseState mouseState, KeyboardState keyboardState)
+        public override void Update()
         {
             if (!enabled || !visible) return;
 
@@ -88,12 +88,12 @@ namespace Mars
             if (!readOnly && Focus && ParentHasFocus)
             {
                 // Get all pressed keys
-                Keys[] pressed = keyboardState.GetPressedKeys();
+                Keys[] pressed = Controls.Keyboard.GetPressedKeys();
 
                 // Is shift key pressed?
                 bool shiftKeyPressed = false;
 
-                if (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
+                if (Controls.Keyboard.IsKeyDown(Keys.LeftShift) || Controls.Keyboard.IsKeyDown(Keys.RightShift))
                     shiftKeyPressed = true;
 
 
@@ -139,12 +139,12 @@ namespace Mars
                 }
             }
 
-            prevKeyboardState = keyboardState;
+            prevKeyboardState = Controls.Keyboard;
 
             // TextBox has two sprites, one when it has focus, the other when it doesn't
             if (texture != null) sourceRectangle = new Rectangle(0, (hasFocus ? texture.Height / 2 : 0), texture.Width, texture.Height / 2);
 
-            base.Update(mouseState, keyboardState);
+            base.Update();
         }
 
         #endregion

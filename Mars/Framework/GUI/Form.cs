@@ -58,7 +58,7 @@ namespace Mars
         /// </summary>
         /// <param name="mouseState">Current mouse state</param>
         /// <param name="keyboardState">Current keyboard state</param>
-        public override void Update(MouseState mouseState, KeyboardState keyboardState)
+        public override void Update()
         {
             if (!Enabled || !visible) return;
 
@@ -67,7 +67,7 @@ namespace Mars
             // Update children
             foreach (GUIControl c in controls)
             {
-                c.Update(mouseState, keyboardState);
+                c.Update();
 
                 // If a child triggered these events the form wont trigger them again
                 this.clicked = this.clicked || c.Clicked;
@@ -114,7 +114,7 @@ namespace Mars
             enableOnMouseDown = !this.mouseDown;
             enableOnMouseMove = !this.mouseMoved;
 
-            base.Update(mouseState, keyboardState);
+            base.Update();
         }
 
         /// <summary>

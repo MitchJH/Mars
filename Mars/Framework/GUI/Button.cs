@@ -59,13 +59,13 @@ namespace Mars
         /// </summary>
         /// <param name="mouseState">Current mouse state</param>
         /// <param name="keyboardState">Current keyboard state</param>
-        public override void Update(MouseState mouseState, KeyboardState keyboardState)
+        public override void Update()
         {
             if (!enabled || !visible) return;
 
             sourceRectangle = sourceRectangles[0];
 
-            if (hasFocus && keyboardState.IsKeyDown(Keys.Enter) && prevKeyboardState.IsKeyUp(Keys.Enter))
+            if (hasFocus && Controls.Keyboard.IsKeyDown(Keys.Enter) && prevKeyboardState.IsKeyUp(Keys.Enter))
             {
                 mouseDown = false;
                 wasReleased = false;
@@ -79,9 +79,9 @@ namespace Mars
             else if (mouseOver)
                 sourceRectangle = sourceRectangles[1];
 
-            prevKeyboardState = keyboardState;
+            prevKeyboardState = Controls.Keyboard;
 
-            base.Update(mouseState, keyboardState);
+            base.Update();
         }
 
         #endregion

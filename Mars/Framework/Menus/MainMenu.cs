@@ -18,7 +18,14 @@ namespace Mars
 
         private Form _menuForm;
         private Rectangle menuRectangle;
+        private Button _sfx_toggle;
+        private Button _music_toggle;
         private Label _quote;
+
+        private Texture2D soundTexture;
+        private Texture2D soundTexture_off;
+        private Texture2D musicTexture;
+        private Texture2D musicTexture_off;
 
         public MainMenu(Rectangle screen, ContentManager content)
         {
@@ -40,7 +47,7 @@ namespace Mars
                 buttonTexture, buttonFont, Color.Black);
 
             _newGame.onClick += new EHandler(NewGame_Click);
-            _newGame.onMouseEnter += new EHandler(Beep);
+            _newGame.onMouseEnter += delegate{ Audio.PlaySoundEffect("high_beep"); };
             _menuForm.AddControl(_newGame);
 
             // LOAD GAME BUTTON
@@ -49,7 +56,7 @@ namespace Mars
                 buttonTexture, buttonFont, Color.Black);
 
             _loadGame.onClick += new EHandler(LoadGame_Click);
-            _loadGame.onMouseEnter += new EHandler(Beep);
+            _loadGame.onMouseEnter += delegate { Audio.PlaySoundEffect("high_beep"); };
             _menuForm.AddControl(_loadGame);
 
             // SETTINGS BUTTON
@@ -58,7 +65,7 @@ namespace Mars
                 buttonTexture, buttonFont, Color.Black);
 
             _settings.onClick += new EHandler(Settings_Click);
-            _settings.onMouseEnter += new EHandler(Beep);
+            _settings.onMouseEnter += delegate { Audio.PlaySoundEffect("high_beep"); };
             _menuForm.AddControl(_settings);
 
             // EXIT BUTTON
@@ -67,8 +74,26 @@ namespace Mars
                 buttonTexture, buttonFont, Color.Black);
 
             _exit.onClick += new EHandler(Exit_Click);
-            _exit.onMouseEnter += new EHandler(Beep);
+            _exit.onMouseEnter += delegate { Audio.PlaySoundEffect("high_beep"); };
             _menuForm.AddControl(_exit);
+
+            // SOUND BUTTON
+            soundTexture = content.Load<Texture2D>("Textures/UI/Buttons/sfx_toggle");
+            soundTexture_off = content.Load<Texture2D>("Textures/UI/Buttons/sfx_toggle_off");
+            _sfx_toggle = new Button("soundToggle", "",
+                new Rectangle(2, 2, 20, 20),
+                soundTexture, buttonFont, Color.Black);
+            if (Settings.EffectsOn == false) _sfx_toggle.Texture = soundTexture_off;
+            _sfx_toggle.onClick += new EHandler(ToggleEffects_Click);
+
+            // MUSIC BUTTON
+            musicTexture = content.Load<Texture2D>("Textures/UI/Buttons/music_toggle");
+            musicTexture_off = content.Load<Texture2D>("Textures/UI/Buttons/music_toggle_off");
+            _music_toggle = new Button("musicToggle", "",
+                new Rectangle(25, 2, 20, 20),
+                musicTexture, buttonFont, Color.Black);
+            if (Settings.MusicOn == false) _music_toggle.Texture = musicTexture_off;
+            _music_toggle.onClick += new EHandler(ToggleMusic_Click);
 
             // VERSION LABEL
             Vector2 stringSizeVersion = Fonts.Get("Tiny").MeasureString(Version.GetVersion());
@@ -89,7 +114,9 @@ namespace Mars
         {
             if (showMenu)
             {
-                _menuForm.Update(Controls.Mouse, Controls.Keyboard);
+                _menuForm.Update();
+                _sfx_toggle.Update();
+                _music_toggle.Update();
             }
 
             if (fadeIn < 1.0f)
@@ -118,6 +145,8 @@ namespace Mars
             if (showMenu)
             {
                 _menuForm.Draw(spriteBatch);
+                _sfx_toggle.Draw(spriteBatch);
+                _music_toggle.Draw(spriteBatch);
                 _quote.Draw(spriteBatch);
             }
             spriteBatch.End();
@@ -139,14 +168,43 @@ namespace Mars
             Audio.PlaySoundEffect("low_double_beep");
         }
 
+        private void ToggleEffects_Click(GUIControl sender)
+        {
+            Settings.EffectsOn = !Settings.EffectsOn;
+
+            if (Settings.EffectsOn)
+            {
+                _sfx_toggle.Texture = soundTexture;
+            }
+            else
+            {
+                _sfx_toggle.Texture = soundTexture_off;
+            }
+
+            Audio.PlaySoundEffect("high_beep");
+        }
+
+        private void ToggleMusic_Click(GUIControl sender)
+        {
+            Settings.MusicOn = !Settings.MusicOn;
+
+            if (Settings.MusicOn)
+            {
+                _music_toggle.Texture = musicTexture;
+                Audio.PlayMusicTrack("main_menu");
+            }
+            else
+            {
+                _music_toggle.Texture = musicTexture_off;
+                Audio.StopMusic();
+            }
+
+            Audio.PlaySoundEffect("high_beep");
+        }
+
         private void Exit_Click(GUIControl sender)
         {
             GameStateManager.State = GameState.Exit;
-        }
-
-        private void Beep(GUIControl sender)
-        {
-            Audio.PlaySoundEffect("high_beep");
         }
     }
 }

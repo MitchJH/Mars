@@ -26,7 +26,9 @@ namespace Mars
         private static bool _mouseScrolling;
         // Audio Settings
         private static float _masterVolume;
+        private static bool _effectsOn;
         private static float _effectVolume;
+        private static bool _musicOn;
         private static float _musicVolume;
 
         static Settings()
@@ -48,7 +50,9 @@ namespace Mars
             _mouseScrolling = true;
             // Audio
             _masterVolume = 1.0f;
+            _effectsOn = true;
             _effectVolume = 1.0f;
+            _musicOn = true;
             _musicVolume = 0.5f;
         }
 
@@ -113,9 +117,17 @@ namespace Mars
                     {
                         _masterVolume = MathHelper.Clamp(float.Parse(value), 0.0f, 1.0f);
                     }
+                    else if (setting.StartsWith("effects_on"))
+                    {
+                        _effectsOn = bool.Parse(value);
+                    }
                     else if (setting.StartsWith("effect_volume"))
                     {
                         _effectVolume = MathHelper.Clamp(float.Parse(value), 0.0f, 1.0f);
+                    }
+                    else if (setting.StartsWith("music_on"))
+                    {
+                        _musicOn = bool.Parse(value);
                     }
                     else if (setting.StartsWith("music_volume"))
                     {
@@ -127,9 +139,9 @@ namespace Mars
 
         public static void LoadFromFile()
         {
-            if (Directory.Exists(appDataPath))
+            if (Directory.Exists(AppDataPath))
             {
-                string file = Path.Combine(appDataPath, @"Settings.txt");
+                string file = Path.Combine(AppDataPath, @"Settings.txt");
 
                 if (File.Exists(file))
                 {
@@ -139,7 +151,7 @@ namespace Mars
             }
             else
             {
-                Directory.CreateDirectory(appDataPath);
+                Directory.CreateDirectory(AppDataPath);
             }
         }
 
@@ -163,15 +175,17 @@ namespace Mars
             sb.AppendLine("");
             sb.AppendLine("# AUDIO SETTINGS");
             sb.AppendLine("master_volume " + _masterVolume.ToString("N2"));
+            sb.AppendLine("effects_on " + _effectsOn.ToString());
             sb.AppendLine("effect_volume " + _effectVolume.ToString("N2"));
+            sb.AppendLine("music_on " + _musicOn.ToString());
             sb.AppendLine("music_volume " + _musicVolume.ToString("N2"));
 
-            if (Directory.Exists(appDataPath) == false)
+            if (Directory.Exists(AppDataPath) == false)
             {
-                Directory.CreateDirectory(appDataPath);
+                Directory.CreateDirectory(AppDataPath);
             }
 
-            string file = Path.Combine(appDataPath, @"Settings.txt");
+            string file = Path.Combine(AppDataPath, @"Settings.txt");
 
             if (File.Exists(file))
             {
@@ -287,16 +301,33 @@ namespace Mars
             set { Settings._masterVolume = value; }
         }
 
+        public static bool EffectsOn
+        {
+            get { return Settings._effectsOn; }
+            set { Settings._effectsOn = value; }
+        }
+
         public static float EffectVolume
         {
             get { return Settings._effectVolume; }
             set { Settings._effectVolume = value; }
         }
 
+        public static bool MusicOn
+        {
+            get { return Settings._musicOn; }
+            set { Settings._musicOn = value; }
+        }
+
         public static float MusicVolume
         {
             get { return Settings._musicVolume; }
             set { Settings._musicVolume = value; }
+        }
+
+        public static string AppDataPath
+        {
+            get { return appDataPath; }
         }
     }
 

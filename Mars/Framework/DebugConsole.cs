@@ -138,7 +138,7 @@ namespace Mars
 
             if (Enabled)
             {
-                consoleTextBox.Update(Controls.Mouse, Controls.Keyboard);
+                consoleTextBox.Update();
             }
         }
 
