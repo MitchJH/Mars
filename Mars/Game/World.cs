@@ -31,6 +31,7 @@ namespace Mars
 
         public World(ContentManager content)
         {
+            UI = new WorldUI(content);
             _tiles = new Tile[Constants.MAP_WIDTH, Constants.MAP_HEIGHT];
             _clock = new Clock();
             _crewMembers = new List<CrewMember>();
