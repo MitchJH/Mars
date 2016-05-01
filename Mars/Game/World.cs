@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Mars
 {
@@ -24,18 +20,17 @@ namespace Mars
         private List<CrewMember> _crewMembers;
         private List<GameObject> _objects;
         private List<Building> _buildings;
-        private  Planet _planet;
+        private Planet _planet;
      
         //REMOVE //TEST
         private bool active_selection = false;
         Texture2D tile_texture;
         Texture2D iso_texture;
         Texture2D iso_texture_wall;
+        private Vector2 mousePosition;
 
-        public World() { }
         public World(ContentManager content)
         {
-            UI = new WorldUI(content);
             _tiles = new Tile[Constants.MAP_WIDTH, Constants.MAP_HEIGHT];
             _clock = new Clock();
             _crewMembers = new List<CrewMember>();
@@ -48,6 +43,19 @@ namespace Mars
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
             _crewMembers.Add(new CrewMember("darren", 23, 800, 1500, "crew"));
+            mousePosition = new Vector2(0, 0);
+    }
+
+        public void ClearGrid()
+        {
+            for (int x = 0; x < Constants.MAP_WIDTH; x++)
+            {
+                for (int y = 0; y < Constants.MAP_HEIGHT; y++)
+                {
+                    _tiles[x, y] = new Tile(x, y);
+                    _tiles[x, y].Type = TileType.Passable;
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -59,7 +67,7 @@ namespace Mars
 
             if (Controls.Mouse.IsInCameraView()) // Don't do anything with the mouse if it's not in our cameras viewport.
             {
-                Vector2 mousePosition = Controls.GameMousePosition;
+                mousePosition = Controls.GameMousePosition;
 
                 // REMOVE/EDIT
                 foreach (Tile t in _tiles)
@@ -113,9 +121,15 @@ namespace Mars
                     {
                         //If the mouseposition is within the textures bounds of a crew member...
                         //This could be done radius based instead of texture bounds based to make it simpler, but might not work then for long rectangular objects such as solar panels or something.
-                        if (mousePosition.X > c.Position.X - (Sprites.MISSING_TEXTURE.Bounds.Width / 2) && mousePosition.X < c.Position.X + (Sprites.MISSING_TEXTURE.Bounds.Width / 2))
+                        Rectangle mouse = new Rectangle();
+                        mouse = ConvertToIsometric(mousePosition.X, mousePosition.Y);
+
+                        Rectangle c_pos = new Rectangle();
+                        c_pos = ConvertToIsometric(c.Position.X, c.Position.Y);
+
+                        if (mousePosition.X > c_pos.X - 150 && mousePosition.X < c_pos.X + 150)
                         {
-                            if (mousePosition.Y > c.Position.Y - (Sprites.MISSING_TEXTURE.Bounds.Height / 2) && mousePosition.Y < c.Position.Y + (Sprites.MISSING_TEXTURE.Bounds.Height / 2))
+                            if (mousePosition.Y > c_pos.Y - 150 && mousePosition.Y < c_pos.Y + 150)
                             {
                                 //deselect any crew that are already selected.
                                 foreach (CrewMember cm in _crewMembers)
@@ -158,6 +172,12 @@ namespace Mars
             }
 
             FrameRateCounter.Update(gameTime);
+
+            //Debug Text Manager. Just add a watcher to the list to watch a variable.
+            DebugTextManager.Update(gameTime);
+            DebugTextManager.AddWatcher(mousePosition, "Mouse Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Selected, "Crew 1 Selected =");
 
             // Check for exit.
             if (Controls.Keyboard.IsKeyDown(Keys.Escape))
@@ -258,6 +278,21 @@ namespace Mars
                         //spriteBatch.DrawString(Fonts.Standard, xx + ":" + yy, new Vector2(rec.X, rec.Y+(Constants.TILE_WIDTH/2)), Color.White);
                     }
                 }
+
+
+                //REMOVE
+
+
+                double tile_pos_x2 = _crewMembers[0].Position.X / 2 - _crewMembers[0].Position.Y / 2;
+                double tile_pos_y2 = _crewMembers[0].Position.X / 2 + _crewMembers[0].Position.Y / 2;
+
+                Rectangle rec2 = new Rectangle(
+                            (int)tile_pos_x2,
+                            (int)tile_pos_y2 + Constants.TILE_DEPTH,
+                            Constants.TILE_WIDTH,
+                            Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+
+                spriteBatch.Draw(Sprites.Get("crew"), rec2, Color.White);
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
@@ -307,22 +342,6 @@ namespace Mars
             }
 
             spriteBatch.End();
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            UI.Draw(spriteBatch);
-            spriteBatch.End();
-        }
-        
-        public void ClearGrid()
-        {
-            for (int x = 0; x < Constants.MAP_WIDTH; x++)
-            {
-                for (int y = 0; y < Constants.MAP_HEIGHT; y++)
-                {
-                    _tiles[x, y] = new Tile(x, y);
-                    _tiles[x, y].Type = TileType.Passable;
-                }
-            }
         }
 
         /// <summary>
@@ -447,6 +466,20 @@ namespace Mars
         private void Swap<T>(ref T a, ref T b)
         {
             T c = a; a = b; b = c;
+        }
+
+        private Rectangle ConvertToIsometric(float x, float y)
+        {
+            double tile_pos_x = x / 2 - y / 2;
+            double tile_pos_y = x / 2 + y / 2;
+
+            Rectangle rec = new Rectangle(
+                        (int)tile_pos_x,
+                        (int)tile_pos_y + Constants.TILE_DEPTH,
+                        Constants.TILE_WIDTH,
+                        Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+
+            return rec;
         }
 
         private Tile TileFromCoordinate(float x, float y)

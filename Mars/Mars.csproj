@@ -62,6 +62,7 @@
     <Compile Include="Framework\Controls.cs" />
     <Compile Include="Framework\DebugConsole.cs" />
     <Compile Include="Framework\Fonts.cs" />
+    <Compile Include="Framework\DebugTextManager.cs" />
     <Compile Include="Framework\FrameRateCounter.cs" />
     <Compile Include="Framework\GameStateManager.cs" />
     <Compile Include="Framework\GUI\Button.cs" />
