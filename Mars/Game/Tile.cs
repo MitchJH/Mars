@@ -26,8 +26,25 @@ namespace Mars
         public Tile(int x, int y)
         {
             _position = new Point(x, y);
-            _center = new Vector2((x * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2), (y * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2));
             _hovered = false;
+
+            //CARTESIAN
+            //_center = new Vector2((x * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2), (y * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2));
+
+            //DIAMOND
+            double tile_pos_x = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
+            double tile_pos_y = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
+
+            Rectangle rec = new Rectangle(
+                        (int)tile_pos_x,
+                        (int)tile_pos_y + Constants.TILE_DEPTH,
+                        Constants.TILE_WIDTH,
+                        Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+
+            float r1 = rec.X + (Constants.TILE_WIDTH / 2);
+            float r2 = rec.Y + (Constants.TILE_WIDTH - Constants.TILE_HEIGHT / 2);
+
+            _center = new Vector2(r1, r2);
         }
         
         public bool IsWalkable(Object unused)
@@ -108,7 +125,7 @@ namespace Mars
                 int hitX = (int)((xTile + yTile) - 0.5);
                 int hitY = (int)((yTile - xTile) + 0.5);
 
-                Console.WriteLine(hitX + ":" + hitY);
+                //Console.WriteLine(hitX + ":" + hitY);
                 localPoint = Point.Zero;
                 return new Point(hitX, hitY);
             }

@@ -60,36 +60,12 @@ namespace Mars
             }
         }
 
-        public static void AddWatcher(int watcher, string description)
+        public static void AddWatcher(object watcher, string description)
         {
             string line = description + " " + watcher.ToString();
             AddLine(line);
         }
 
-        public static void AddWatcher(float watcher, string description)
-        {
-            string line = description + " " + watcher.ToString();
-            AddLine(line);
-        }
-
-        public static void AddWatcher(Vector2 watcher, string description)
-        {
-            string line = description + " " + watcher.X + "," + watcher.Y;
-            AddLine(line);
-        }
-
-        public static void AddWatcher(string watcher, string description)
-        {
-            string line = description + " " + watcher;
-            AddLine(line);
-        }
-
-        public static void AddWatcher(bool watcher, string description)
-        {
-            string line = description + " " + watcher.ToString();
-            AddLine(line);
-        }
-        
         public static void AddLine(string newLine)
         {
             _text += "\n";

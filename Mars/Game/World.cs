@@ -41,7 +41,7 @@ namespace Mars
             tile_texture = content.Load<Texture2D>("Textures/tile");
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
-            _crewMembers.Add(new CrewMember("darren", 23, 800, 1500, "crew"));
+            _crewMembers.Add(new CrewMember("Darren", 23, 1400, 800, "crew"));
             mousePosition = new Vector2(0, 0);
     }
 
@@ -66,7 +66,7 @@ namespace Mars
             if (Controls.Mouse.IsInCameraView()) // Don't do anything with the mouse if it's not in our cameras viewport.
             {
                 mousePosition = Controls.GameMousePosition;
-
+                
                 // REMOVE/EDIT
                 foreach (Tile t in _tiles)
                 {
@@ -120,10 +120,10 @@ namespace Mars
                         //If the mouseposition is within the textures bounds of a crew member...
                         //This could be done radius based instead of texture bounds based to make it simpler, but might not work then for long rectangular objects such as solar panels or something.
                         Rectangle mouse = new Rectangle();
-                        mouse = ConvertToIsometric(mousePosition.X, mousePosition.Y);
+                        mouse = ConvertToIsometric(new Vector2 (mousePosition.X, mousePosition.Y));
 
                         Rectangle c_pos = new Rectangle();
-                        c_pos = ConvertToIsometric(c.Position.X, c.Position.Y);
+                        c_pos = ConvertToIsometric(new Vector2(c.Position.X, c.Position.Y));
 
                         if (mousePosition.X > c_pos.X - 150 && mousePosition.X < c_pos.X + 150)
                         {
@@ -157,8 +157,10 @@ namespace Mars
                         {
                             if (cm.Selected)
                             {
-                                Point start_location = new Point((int)cm.Position.X / Constants.TILE_WIDTH, (int)cm.Position.Y / Constants.TILE_WIDTH);
-                                Point destination = Controls.GameMousePosition.ToPoint();
+
+                                Point start_location = ConvertToTile(cm.Position);
+                                Point destination = ConvertToTile(mousePosition);
+
                                 Console.WriteLine("Generating Path from point (" + start_location.X + "," + start_location.Y + ") to point (" + destination.X + "," + destination.Y + ")");
 
                                 LinkedList<Tile> path = World.FindPath(start_location, destination);
@@ -174,14 +176,30 @@ namespace Mars
             //Debug Text Manager. Just add a watcher to the list to watch a variable.
             DebugTextManager.Update(gameTime);
             DebugTextManager.AddWatcher(mousePosition, "Mouse Position =");
-            DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew Position =");
-            DebugTextManager.AddWatcher(_crewMembers[0].Selected, "Crew 1 Selected =");
+            DebugTextManager.AddWatcher(ConvertToTile(mousePosition), "Mouse Tile Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew " + _crewMembers[0].Name + " Position =");
+            DebugTextManager.AddWatcher(ConvertToTile(_crewMembers[0].Position), "Crew " + _crewMembers[0].Name + " Tile Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Selected, "Crew " + _crewMembers[0].Name + " Selected =");
 
             // Check for exit.
             if (Controls.Keyboard.IsKeyDown(Keys.Escape))
             {
                 GameStateManager.State = GameState.MainMenu;
             }
+        }
+
+        private Point ConvertToTile(Vector2 position)
+        {
+            //Converts world coordinates to tile coordinates.
+            double xTile = (double)position.X / (double)Constants.TILE_WIDTH;
+            double yTile = (double)position.Y / (double)Constants.TILE_HEIGHT;
+
+            int hitX = (int)((xTile + yTile) - 0.5);
+            int hitY = (int)((yTile - xTile) + 0.5);
+
+            Point tile_position = new Point(hitX, hitY);
+
+            return tile_position;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -280,17 +298,13 @@ namespace Mars
 
                 //REMOVE
 
+                
 
-                double tile_pos_x2 = _crewMembers[0].Position.X / 2 - _crewMembers[0].Position.Y / 2;
-                double tile_pos_y2 = _crewMembers[0].Position.X / 2 + _crewMembers[0].Position.Y / 2;
+                spriteBatch.Draw(Sprites.Get("crew"), ConvertToIsometric(_crewMembers[0].Position), Color.White);
+                _crewMembers[0].Draw(spriteBatch);
 
-                Rectangle rec2 = new Rectangle(
-                            (int)tile_pos_x2,
-                            (int)tile_pos_y2 + Constants.TILE_DEPTH,
-                            Constants.TILE_WIDTH,
-                            Constants.TILE_WIDTH + Constants.TILE_DEPTH);
-
-                spriteBatch.Draw(Sprites.Get("crew"), rec2, Color.White);
+                //if (_crewMembers[0].Selected)
+                    //spriteBatch.DrawCircle(new Vector2(rec2.X + 100, rec2.Y + 100), CrewMembers[0].Radius, 20, Color.Green);
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
@@ -466,16 +480,16 @@ namespace Mars
             T c = a; a = b; b = c;
         }
 
-        private static Rectangle ConvertToIsometric(float x, float y)
+        private static Rectangle ConvertToIsometric(Vector2 pos)
         {
-            double tile_pos_x = x / 2 - y / 2;
-            double tile_pos_y = x / 2 + y / 2;
+            double tile_pos_x = pos.X / 2 - pos.Y / 2;
+            double tile_pos_y = (pos.X / 2) / 2 + (pos.Y /2) / 2;
 
             Rectangle rec = new Rectangle(
                         (int)tile_pos_x,
-                        (int)tile_pos_y + Constants.TILE_DEPTH,
-                        Constants.TILE_WIDTH,
-                        Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+                        (int)tile_pos_y,
+                        Constants.TILE_WIDTH / 2,
+                        Constants.TILE_WIDTH / 2);
 
             return rec;
         }

@@ -219,7 +219,7 @@ namespace Mars
                 Audio.PlaySoundEffect("high_double_beep");
 
                 //Debug
-                //Console.WriteLine("There are " + _path.Count + " current waypoints calculated on the path.");
+                Console.WriteLine("There are " + _path.Count + " current waypoints calculated on the path.");
                 return true;
             }
         }
