@@ -301,8 +301,12 @@ namespace Mars
                 spriteBatch.Draw(Sprites.Get("crew"), ConvertToIsometric(_crewMembers[0].Position), Color.White);
                 _crewMembers[0].Draw(spriteBatch);
 
-                //if (_crewMembers[0].Selected)
-                    //spriteBatch.DrawCircle(new Vector2(rec2.X + 100, rec2.Y + 100), CrewMembers[0].Radius, 20, Color.Green);
+                /*
+                if (_crewMembers[0].Selected)
+                {
+                    spriteBatch.DrawCircle(new Vector2(rec2.X + 100, rec2.Y + 100), CrewMembers[0].Radius, 20, Color.Green);
+                }
+                */
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
@@ -352,6 +356,8 @@ namespace Mars
             }
 
             spriteBatch.End();
+
+            _UI.Draw(spriteBatch);
         }
 
         /// <summary>

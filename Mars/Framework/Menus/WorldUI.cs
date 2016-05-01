@@ -53,10 +53,12 @@ namespace Mars
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
             foreach (GUIControl control in _controls)
             {
                 control.Draw(spriteBatch);
             }
+            spriteBatch.End();
         }
 
         private void ButtonBuild_Click(GUIControl sender)

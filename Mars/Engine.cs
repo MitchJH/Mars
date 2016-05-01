@@ -99,7 +99,7 @@ namespace Mars
 
             // Enable the DebugTextManager
             DebugTextManager.Enable();
-            DebugTextManager.SetPosition(new Vector2(1, 20));
+            DebugTextManager.SetPosition(new Vector2(1, 50));
 
             // Enable version display
             Version.Enable();
