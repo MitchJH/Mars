@@ -97,6 +97,17 @@ namespace Mars
                 consoleTextBox.Text = cam_pos;
                 actualCommand = false;
             }
+            else if(command == "debug")
+            {
+                if(DebugTextManager.Enabled)
+                {
+                    DebugTextManager.Disable();
+                }
+                else
+                {
+                    DebugTextManager.Enable();
+                }
+            }
             else
             {
                 actualCommand = false;

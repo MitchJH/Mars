@@ -26,6 +26,7 @@ namespace Mars
         Texture2D tile_texture;
         Texture2D iso_texture;
         Texture2D iso_texture_wall;
+        private Vector2 mousePosition;
 
         public World(ContentManager content)
         {
@@ -41,8 +42,8 @@ namespace Mars
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
             _crewMembers.Add(new CrewMember("darren", 23, 800, 1500, "crew"));
-            
-        }
+            mousePosition = new Vector2(0, 0);
+    }
 
         public void ClearGrid()
         {
@@ -64,7 +65,7 @@ namespace Mars
 
             if (Controls.Mouse.IsInCameraView()) // Don't do anything with the mouse if it's not in our cameras viewport.
             {
-                Vector2 mousePosition = Controls.GameMousePosition;
+                mousePosition = Controls.GameMousePosition;
 
                 // REMOVE/EDIT
                 foreach (Tile t in _tiles)
@@ -118,9 +119,15 @@ namespace Mars
                     {
                         //If the mouseposition is within the textures bounds of a crew member...
                         //This could be done radius based instead of texture bounds based to make it simpler, but might not work then for long rectangular objects such as solar panels or something.
-                        if (mousePosition.X > c.Position.X - (Sprites.MISSING_TEXTURE.Bounds.Width / 2) && mousePosition.X < c.Position.X + (Sprites.MISSING_TEXTURE.Bounds.Width / 2))
+                        Rectangle mouse = new Rectangle();
+                        mouse = ConvertToIsometric(mousePosition.X, mousePosition.Y);
+
+                        Rectangle c_pos = new Rectangle();
+                        c_pos = ConvertToIsometric(c.Position.X, c.Position.Y);
+
+                        if (mousePosition.X > c_pos.X - 150 && mousePosition.X < c_pos.X + 150)
                         {
-                            if (mousePosition.Y > c.Position.Y - (Sprites.MISSING_TEXTURE.Bounds.Height / 2) && mousePosition.Y < c.Position.Y + (Sprites.MISSING_TEXTURE.Bounds.Height / 2))
+                            if (mousePosition.Y > c_pos.Y - 150 && mousePosition.Y < c_pos.Y + 150)
                             {
                                 //deselect any crew that are already selected.
                                 foreach (CrewMember cm in World.CrewMembers)
@@ -163,6 +170,12 @@ namespace Mars
             }
 
             FrameRateCounter.Update(gameTime);
+
+            //Debug Text Manager. Just add a watcher to the list to watch a variable.
+            DebugTextManager.Update(gameTime);
+            DebugTextManager.AddWatcher(mousePosition, "Mouse Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew Position =");
+            DebugTextManager.AddWatcher(_crewMembers[0].Selected, "Crew 1 Selected =");
 
             // Check for exit.
             if (Controls.Keyboard.IsKeyDown(Keys.Escape))
@@ -278,9 +291,6 @@ namespace Mars
                             Constants.TILE_WIDTH + Constants.TILE_DEPTH);
 
                 spriteBatch.Draw(Sprites.Get("crew"), rec2, Color.White);
-
-               
-
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricStaggered)
             {
@@ -454,6 +464,20 @@ namespace Mars
         private static void Swap<T>(ref T a, ref T b)
         {
             T c = a; a = b; b = c;
+        }
+
+        private static Rectangle ConvertToIsometric(float x, float y)
+        {
+            double tile_pos_x = x / 2 - y / 2;
+            double tile_pos_y = x / 2 + y / 2;
+
+            Rectangle rec = new Rectangle(
+                        (int)tile_pos_x,
+                        (int)tile_pos_y + Constants.TILE_DEPTH,
+                        Constants.TILE_WIDTH,
+                        Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+
+            return rec;
         }
 
         private static Tile TileFromCoordinate(float x, float y)

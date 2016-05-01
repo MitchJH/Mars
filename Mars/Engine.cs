@@ -96,6 +96,11 @@ namespace Mars
             // Enable the FPS counter
             FrameRateCounter.Enable();
             FrameRateCounter.SetPosition(new Vector2(GraphicsDevice.Viewport.Width - FrameRateCounter.LikelyTextWidth, 0));
+
+            // Enable the DebugTextManager
+            DebugTextManager.Enable();
+            DebugTextManager.SetPosition(new Vector2(1, 20));
+
             // Enable version display
             Version.Enable();
 
@@ -144,6 +149,7 @@ namespace Mars
                 GraphicsDevice.Clear(Constants.BACK_COLOUR);
                 WORLD.Draw(SPRITEBATCH);
                 FrameRateCounter.Draw(SPRITEBATCH);
+                DebugTextManager.Draw(SPRITEBATCH);
             }
             else if (GameStateManager.State == GameState.MainMenu)
             {
