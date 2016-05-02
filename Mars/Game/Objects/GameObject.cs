@@ -15,6 +15,9 @@ namespace Mars
         private float _powerRequirement;    //How much power it requires.
         private bool _isPowered;            //If the object is currently powered or not.
 
+        private float _oxygenRequirement;   //How much oxygen it requires.
+        private bool _recievingOxygen;      //If the object is currently recieving Oxygen.
+
         public GameObject(string id, string objectType, Vector2 tilePosition)
             : base()
         {
@@ -26,7 +29,7 @@ namespace Mars
             OverwriteTiles();
         }
 
-        public GameObject(string id, string objectType, Vector2 tilePosition, float powerRequirement)
+        public GameObject(string id, string objectType, Vector2 tilePosition, float powerRequirement, float oxygenRequirement)
             : base()
         {
             ID = id;
@@ -41,6 +44,13 @@ namespace Mars
             {
                 _powerRequirement = powerRequirement;
                 _isPowered = false;
+            }
+
+            //If the object requires Oxygen, set it's Oxygen requirement.
+            if (_objectType.RequiresOxygen)
+            {
+                _oxygenRequirement = oxygenRequirement;
+                _recievingOxygen = false;
             }
 
         }

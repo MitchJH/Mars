@@ -18,13 +18,16 @@ namespace Mars
         private bool _producesPower;
         private bool _requiresPower;
 
+        private bool _producesOxygen;
+        private bool _requiresOxygen;
+
         private int _width;
         private int _height;
 
         public ObjectType()
         {
         }
-        public ObjectType(string key, string name, string description, string sprite, bool isInternal, bool isInteractable, bool requiresPower, bool producesPower, int width, int height)
+        public ObjectType(string key, string name, string description, string sprite, bool isInternal, bool isInteractable, bool requiresPower, bool producesPower, bool requiresOxygen, bool producesOxygen, int width, int height)
         {
             _key = key;
             _name = name;
@@ -34,6 +37,8 @@ namespace Mars
             _isInteractable = isInteractable;
             _requiresPower = requiresPower;
             _producesPower = producesPower;
+            _requiresPower = requiresOxygen;
+            _producesPower = producesOxygen;
             _width = width;
             _height = height;
         }
@@ -84,6 +89,18 @@ namespace Mars
         {
             get { return _producesPower; }
             set { _producesPower = value; }
+        }
+
+        public bool RequiresOxygen
+        {
+            get { return _requiresOxygen; }
+            set { _requiresOxygen = value; }
+        }
+
+        public bool ProducesOxygen
+        {
+            get { return _producesOxygen; }
+            set { _producesOxygen = value; }
         }
 
         public int Width
