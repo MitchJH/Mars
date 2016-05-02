@@ -55,16 +55,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
-    <Compile Include="Framework\Audio.cs" />
+    <Compile Include="Framework\ContentManagement\Audio.cs" />
     <Compile Include="Framework\Camera.cs" />
     <Compile Include="Framework\Clock.cs" />
     <Compile Include="Framework\Constants.cs" />
     <Compile Include="Framework\Controls.cs" />
     <Compile Include="Framework\DebugConsole.cs" />
-    <Compile Include="Framework\Fonts.cs" />
-    <Compile Include="Framework\DebugTextManager.cs" />
+    <Compile Include="Framework\ContentManagement\Fonts.cs" />
+    <Compile Include="Framework\Managers\DebugTextManager.cs" />
     <Compile Include="Framework\FrameRateCounter.cs" />
-    <Compile Include="Framework\GameStateManager.cs" />
+    <Compile Include="Framework\Managers\GameStateManager.cs" />
     <Compile Include="Framework\GUI\Button.cs" />
     <Compile Include="Framework\GUI\CheckBox.cs" />
     <Compile Include="Framework\GUI\CircleButton.cs" />
@@ -75,18 +75,19 @@
     <Compile Include="Framework\GUI\PictureBox.cs" />
     <Compile Include="Framework\GUI\RadioButton.cs" />
     <Compile Include="Framework\GUI\TextBox.cs" />
-    <Compile Include="Framework\Localization.cs" />
+    <Compile Include="Framework\ContentManagement\Localization.cs" />
+    <Compile Include="Framework\Managers\BuildModeManager.cs" />
     <Compile Include="Framework\Menus\GameUI.cs" />
     <Compile Include="Framework\Menus\MainMenuUI.cs" />
     <Compile Include="Framework\Menus\WorldUI.cs" />
     <Compile Include="Framework\Pathfinding\PriorityQueue.cs" />
     <Compile Include="Framework\Pathfinding\SpatialAStar.cs" />
-    <Compile Include="Framework\Primitives2D.cs" />
+    <Compile Include="Framework\GUI\Primitives2D.cs" />
     <Compile Include="Framework\Settings.cs" />
-    <Compile Include="Framework\Sprites.cs" />
-    <Compile Include="Framework\UIHandler.cs" />
+    <Compile Include="Framework\ContentManagement\Sprites.cs" />
+    <Compile Include="Framework\Managers\UIHandler.cs" />
     <Compile Include="Framework\Version.cs" />
-    <Compile Include="Game\CrewMember.cs" />
+    <Compile Include="Game\Crew\CrewMember.cs" />
     <Compile Include="Game\Entity.cs" />
     <Compile Include="Game\EntityCollider.cs" />
     <Compile Include="Game\Objects\GameObject.cs" />
