@@ -52,10 +52,12 @@ namespace Mars
                         string sprite = split[3];
                         bool isInternal = bool.Parse(split[4]);
                         bool isInteractable = bool.Parse(split[5]);
-                        int width = int.Parse(split[6]);
-                        int height = int.Parse(split[7]);
+                        bool producesPower = bool.Parse(split[6]);
+                        bool requiresPower = bool.Parse(split[7]);
+                        int width = int.Parse(split[8]);
+                        int height = int.Parse(split[9]);
 
-                        ObjectType newObject = new ObjectType(id, name, description, sprite, isInternal, isInteractable, width, height);
+                        ObjectType newObject = new ObjectType(id, name, description, sprite, isInternal, isInteractable, producesPower, requiresPower, width, height);
                         _objectTypes.Add(id, newObject);
                     }
                 }
