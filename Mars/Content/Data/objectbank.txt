@@ -1,4 +1,4 @@
-# ID, Name, Description, Sprite, isInternal, isInteractable, Width, Height
-bed1,BedName1,Description1,bed1,true,true,2,3
-bed2,BedName2,Description2,bed2,true,true,2,3
-bed3,BedName3,Description3,bed3,true,true,2,2
+# ID, Name, Description, Sprite, isInternal, isInteractable, producesPower, requiresPower, Width, Height
+bed1,BedName1,Description1,bed1,true,true,false,false,2,3
+bed2,BedName2,Description2,bed2,true,true,false,false,2,3
+bed3,BedName3,Description3,bed3,true,true,false,false,2,2
