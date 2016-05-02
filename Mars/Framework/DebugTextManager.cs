@@ -17,7 +17,7 @@ namespace Mars
 
         static DebugTextManager()
         {
-            _enabled = false;
+            _enabled = Settings.DebugOn;
             _headerText = "Debug Text, console 'debug' to disable/enable. ";
             _text = _headerText;
             _font = Fonts.Standard;
@@ -41,7 +41,7 @@ namespace Mars
 
         public static void Update(GameTime gameTime)
         {
-            if (_enabled)
+            if (Settings.DebugOn)
             {
                 _text = _headerText;
             }
@@ -49,7 +49,7 @@ namespace Mars
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (_enabled)
+            if (Settings.DebugOn)
             {
                 spriteBatch.Begin();
 

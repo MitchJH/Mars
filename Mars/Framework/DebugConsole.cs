@@ -104,11 +104,11 @@ namespace Mars
             {
                 if (DebugTextManager.Enabled)
                 {
-                    DebugTextManager.Disable();
+                    Settings.DebugOn = false;
                 }
                 else
                 {
-                    DebugTextManager.Enable();
+                    Settings.DebugOn = true;
                 }
             }
             else if (command == "save")

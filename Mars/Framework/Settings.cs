@@ -30,6 +30,8 @@ namespace Mars
         private static float _effectVolume;
         private static bool _musicOn;
         private static float _musicVolume;
+        // Debug Settings
+        private static bool _debugOn;
 
         static Settings()
         {
@@ -54,6 +56,8 @@ namespace Mars
             _effectVolume = 1.0f;
             _musicOn = true;
             _musicVolume = 0.5f;
+            // Debug
+            _debugOn = false;
         }
 
         private static void ParseSettings(List<string> settings)
@@ -133,6 +137,10 @@ namespace Mars
                     {
                         _musicVolume = MathHelper.Clamp(float.Parse(value), 0.0f, 1.0f);
                     }
+                    else if (setting.StartsWith("debug_mode"))
+                    {
+                        _debugOn = bool.Parse(value);
+                    }
                 }
             }
         }
@@ -179,6 +187,8 @@ namespace Mars
             sb.AppendLine("effect_volume " + _effectVolume.ToString("N2"));
             sb.AppendLine("music_on " + _musicOn.ToString());
             sb.AppendLine("music_volume " + _musicVolume.ToString("N2"));
+            sb.AppendLine("# DEBUG SETTINGS");
+            sb.AppendLine("debug_mode " + _debugOn.ToString());
 
             if (Directory.Exists(AppDataPath) == false)
             {
@@ -323,6 +333,12 @@ namespace Mars
         {
             get { return Settings._musicVolume; }
             set { Settings._musicVolume = value; }
+        }
+
+        public static bool DebugOn
+        {
+            get { return Settings._debugOn; }
+            set { Settings._debugOn = value; }
         }
 
         public static string AppDataPath
