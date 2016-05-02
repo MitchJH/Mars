@@ -75,6 +75,7 @@ namespace Mars
         public static bool Enabled
         {
             get { return _enabled; }
+            set { _enabled = value; }
         }
 
         public static int LikelyTextWidth

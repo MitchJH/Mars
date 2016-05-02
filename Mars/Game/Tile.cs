@@ -17,11 +17,9 @@ namespace Mars
     public class Tile : IPathNode<Object>
     {
         private Point _position;
-        private Rectangle _rectangle;
         private Vector2 _center;
         private TileType _type;
         private bool _hovered;
-        private string _texture;
 
         public Tile(int x, int y)
         {
@@ -79,25 +77,6 @@ namespace Mars
         {
             get { return _hovered; }
             set { _hovered = value; }
-        }
-
-        public string Texture
-        {
-            get { return _texture; }
-            set { _texture = value; }
-        }
-
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return _rectangle;
-            }
-
-            set
-            {
-                _rectangle = value;
-            }
         }
 
         public static Point WorldToMapCell(Point worldPoint, out Point localPoint)

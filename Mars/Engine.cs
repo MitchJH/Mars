@@ -13,7 +13,7 @@ namespace Mars
         public SpriteBatch SPRITEBATCH;
 
         public World WORLD;
-        public MainMenu MAIN_MENU;
+        public MainMenuUI MAIN_MENU;
 
         public Engine(string[] args)
         {
@@ -105,7 +105,7 @@ namespace Mars
 
             // Create Game State Objects
             WORLD = new World(Content);
-            MAIN_MENU = new MainMenu(GraphicsDevice.Viewport.Bounds, Content);
+            MAIN_MENU = new MainMenuUI("Main Menu", GraphicsDevice.Viewport.Bounds, Content);
         }
 
         protected override void UnloadContent()
@@ -155,7 +155,7 @@ namespace Mars
                 GraphicsDevice.Clear(Color.Black);
                 MAIN_MENU.Draw(SPRITEBATCH);
             }
-
+            
             DebugConsole.Draw(SPRITEBATCH);
 
             base.Draw(gameTime);

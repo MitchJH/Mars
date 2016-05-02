@@ -463,6 +463,10 @@ namespace Mars
             {
                 return positionWidthHeight;
             }
+            set
+            {
+                positionWidthHeight = value;
+            }
         }
 
         /// <summary>

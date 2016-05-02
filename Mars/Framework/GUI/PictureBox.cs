@@ -62,6 +62,15 @@ namespace Mars
                 spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White);
             }
         }
+        public void DrawWithFade(SpriteBatch spriteBatch, float fade)
+        {
+            if (!visible) return;
+
+            if (texture != null)
+            {
+                spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White * fade);
+            }
+        }
 
         #endregion
 
@@ -70,7 +79,7 @@ namespace Mars
         /// <summary>
         /// Calculates rectangles required for rendering
         /// </summary>
-        protected void CalcRectangles()
+        public void CalcRectangles()
         {
             if (texture == null) return;
 

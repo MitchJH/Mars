@@ -187,6 +187,7 @@ namespace Mars
             sb.AppendLine("effect_volume " + _effectVolume.ToString("N2"));
             sb.AppendLine("music_on " + _musicOn.ToString());
             sb.AppendLine("music_volume " + _musicVolume.ToString("N2"));
+            sb.AppendLine("");
             sb.AppendLine("# DEBUG SETTINGS");
             sb.AppendLine("debug_mode " + _debugOn.ToString());
 

@@ -16,7 +16,7 @@ namespace Mars
     [DataContract]
     public class World
     {
-        private WorldUI _UI;
+        private GameUI _UI;
         private Tile[,] _tiles;
         private Clock _clock;
         private List<CrewMember> _crewMembers;
@@ -33,7 +33,7 @@ namespace Mars
 
         public World(ContentManager content)
         {
-            _UI = new WorldUI(content);
+            _UI = new WorldUI("World", content);
             _tiles = new Tile[Constants.MAP_WIDTH, Constants.MAP_HEIGHT];
             _clock = new Clock();
             _crewMembers = new List<CrewMember>();
@@ -98,12 +98,10 @@ namespace Mars
                 {
                     if (Controls.Mouse.RightButton == ButtonState.Pressed)
                     {
-                        _tiles[hoveredTile.X, hoveredTile.Y].Texture = "CLIFF";
                         _tiles[hoveredTile.X, hoveredTile.Y].Type = TileType.Impassable;
                     }
                     else if (Controls.Mouse.LeftButton == ButtonState.Pressed)
                     {
-                        _tiles[hoveredTile.X, hoveredTile.Y].Texture = "";
                         _tiles[hoveredTile.X, hoveredTile.Y].Hovered = true;
                         _tiles[hoveredTile.X, hoveredTile.Y].Type = TileType.Passable;
                     }
@@ -181,6 +179,7 @@ namespace Mars
 
             //Debug Text Manager. Just add a watcher to the list to watch a variable.
             DebugTextManager.Update(gameTime);
+            DebugTextManager.AddWatcher(GameStateManager.Mode, "Current Mode = ");
             DebugTextManager.AddWatcher(mousePosition, "Mouse Position =");
             DebugTextManager.AddWatcher(ConvertToTile(mousePosition), "Mouse Tile Position =");
             DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew " + _crewMembers[0].Name + " Position =");
@@ -192,20 +191,6 @@ namespace Mars
             {
                 GameStateManager.State = GameState.MainMenu;
             }
-        }
-
-        private Point ConvertToTile(Vector2 position)
-        {
-            //Converts world coordinates to tile coordinates.
-            double xTile = (double)position.X / (double)Constants.TILE_WIDTH;
-            double yTile = (double)position.Y / (double)Constants.TILE_HEIGHT;
-
-            int hitX = (int)((xTile + yTile) - 0.5);
-            int hitY = (int)((yTile - xTile) + 0.5);
-
-            Point tile_position = new Point(hitX, hitY);
-
-            return tile_position;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -230,7 +215,7 @@ namespace Mars
                                     Constants.TILE_HEIGHT,
                                     Constants.TILE_HEIGHT);
 
-                        if (tile.Texture != "CLIFF")
+                        if (tile.Type != TileType.Impassable)
                         {
                             if (tile.Hovered)
                             {
@@ -273,7 +258,7 @@ namespace Mars
                                     Constants.TILE_WIDTH,
                                     Constants.TILE_WIDTH + Constants.TILE_DEPTH);
 
-                        if (tile.Texture != "CLIFF")
+                        if (tile.Type != TileType.Impassable)
                         {
                             if (tile.Hovered)
                             {
@@ -332,7 +317,7 @@ namespace Mars
                                     Constants.TILE_WIDTH,
                                     Constants.TILE_WIDTH + Constants.TILE_DEPTH);
 
-                        if (tile.Texture != "CLIFF")
+                        if (tile.Type != TileType.Impassable)
                         {
                             if (tile.Hovered)
                             {
@@ -361,6 +346,20 @@ namespace Mars
             spriteBatch.End();
 
             _UI.Draw(spriteBatch);
+        }
+
+        private Point ConvertToTile(Vector2 position)
+        {
+            //Converts world coordinates to tile coordinates.
+            double xTile = (double)position.X / (double)Constants.TILE_WIDTH;
+            double yTile = (double)position.Y / (double)Constants.TILE_HEIGHT;
+
+            int hitX = (int)((xTile + yTile) - 0.5);
+            int hitY = (int)((yTile - xTile) + 0.5);
+
+            Point tile_position = new Point(hitX, hitY);
+
+            return tile_position;
         }
 
         /// <summary>

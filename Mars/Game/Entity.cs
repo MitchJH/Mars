@@ -8,9 +8,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Mars
 {
-    public class Entity : Node
+    public class Entity
     {
         private string _ID;                 // The unique identifier of this entity.
+
+        private Vector2 _position;
+        private Vector2 _tile_position;
 
         public int _waypoint;
         private bool _selected;
@@ -71,10 +74,8 @@ namespace Mars
 
         }
 
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             if (_dynamic)
             {
                 //ApplyPhysics(gameTime);
@@ -170,6 +171,18 @@ namespace Mars
         {
             get { return _ID; }
             set { _ID = value; }
+        }
+
+        public Vector2 Position
+        {
+            get { return _position; }
+            set { _position = value; }
+        }
+
+        public Vector2 TilePosition
+        {
+            get { return _tile_position; }
+            set { _tile_position = value; }
         }
 
         public float Width

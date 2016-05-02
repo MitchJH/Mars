@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mars
 {
-    public class MainMenu
+    public class MainMenuUI : GameUI
     {
-        private Texture2D _backgroundImage;
         private Random rand = new Random();
         private bool showMenu = false;
         private float fadeIn = -0.01f;
 
+        private PictureBox _background;
         private Form _menuForm;
         private Rectangle menuRectangle;
         private Button _sfx_toggle;
@@ -27,14 +27,17 @@ namespace Mars
         private Texture2D musicTexture;
         private Texture2D musicTexture_off;
 
-        public MainMenu(Rectangle screen, ContentManager content)
+        public MainMenuUI(string ID, Rectangle screen, ContentManager content)
+            : base(ID)
         {
-            _backgroundImage = content.Load<Texture2D>("Textures/UI/mars_bg");
+            Texture2D backgroundImage = content.Load<Texture2D>("Textures/UI/mars_bg");
+            _background = new PictureBox("mainMenuBackground", new Rectangle(100, 100, 100, 100), backgroundImage, SizeMode.CenterImage);
 
             Texture2D menuTexture = content.Load<Texture2D>("Textures/UI/menu");
             Point menuPos = new Point((screen.Width / 2) - (menuTexture.Width / 2), (screen.Height / 2) - (menuTexture.Height / 2));
-            menuRectangle = new Rectangle(menuPos.X, menuPos.Y - 30, menuTexture.Width, menuTexture.Height);
+            menuRectangle = new Rectangle(menuPos.X, menuPos.Y - 40, menuTexture.Width, menuTexture.Height);
             _menuForm = new Form("menuForm", "", menuRectangle, menuTexture, Fonts.Standard, Color.Black);
+            _menuForm.Position = new Vector2(-menuRectangle.Width, _menuForm.Position.Y);
 
             Texture2D buttonTexture = content.Load<Texture2D>("Textures/UI/button");
             Point buttonSize = new Point(240, 40);
@@ -110,10 +113,29 @@ namespace Mars
             Audio.PlayMusicTrack("main_menu");
         }
 
-        public void Update()
+        public override void Update()
         {
+            _background.PositionWidthHeight = GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds;
+            _background.CalcRectangles();
+
+            _menuForm.Position = new Vector2(
+                (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Width / 2) - (_menuForm.Width / 2),
+                (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height / 2) - (_menuForm.Height / 2) - 40);
+
+
+            float stringSize = Fonts.Get("Quote").MeasureString(Constants.GAME_COPYRIGHT).X;
+            _quote.Position = new Vector2(
+                (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Width / 2) - (stringSize / 2),
+                GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height - 20);
+
             if (showMenu)
             {
+                if (_menuForm.Position.X < menuRectangle.X)
+                {
+                    float newPos = MathHelper.Lerp(_menuForm.Position.X, 370, 0.05f);
+                    _menuForm.Position = new Vector2(newPos, _menuForm.Position.Y);
+                }
+
                 _menuForm.Update();
                 _sfx_toggle.Update();
                 _music_toggle.Update();
@@ -134,13 +156,11 @@ namespace Mars
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle backgroundSize = GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds;
-
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-            spriteBatch.Draw(_backgroundImage, backgroundSize, Color.White * fadeIn);
+            
+            _background.DrawWithFade(spriteBatch, fadeIn);
 
             if (showMenu)
             {
@@ -156,6 +176,7 @@ namespace Mars
         {
             Audio.PlaySoundEffect("high_double_beep");
             GameStateManager.State = GameState.GameWorld;
+            GameStateManager.Mode = GameMode.World;
         }
 
         private void LoadGame_Click(GUIControl sender)

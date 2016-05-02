@@ -9,11 +9,13 @@ namespace Mars
     {
         private static Engine _engine;
         private static GameState _state;
+        private static GameMode _mode;
 
         static GameStateManager()
         {
             _engine = null;
             _state = GameState.MainMenu;
+            _mode = GameMode.World;
         }
 
         public static Engine ENGINE
@@ -36,6 +38,12 @@ namespace Mars
             get { return _state; }
             set { _state = value; }
         }
+
+        public static GameMode Mode
+        {
+            get { return _mode; }
+            set { _mode = value; }
+        }
     }
 
     public enum GameState
@@ -43,5 +51,15 @@ namespace Mars
         GameWorld,
         MainMenu,
         Exit
+    }
+
+    public enum GameMode
+    {
+        Menu,
+        World,
+        Build,
+        Objects,
+        Wire,
+        Pipe
     }
 }
