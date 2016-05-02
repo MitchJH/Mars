@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using System.Xml;
+using System.Runtime.Serialization;
 
 namespace Mars
 {
@@ -97,15 +100,26 @@ namespace Mars
                 consoleTextBox.Text = cam_pos;
                 actualCommand = false;
             }
-            else if(command == "debug")
+            else if (command == "debug")
             {
-                if(DebugTextManager.Enabled)
+                if (DebugTextManager.Enabled)
                 {
                     DebugTextManager.Disable();
                 }
                 else
                 {
                     DebugTextManager.Enable();
+                }
+            }
+            else if (command == "save")
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(World));
+
+                XmlWriterSettings XML_Settings = new XmlWriterSettings { Indent = true };
+
+                using (XmlWriter xml = XmlWriter.Create(Settings.AppDataPath + "\\save.xml", XML_Settings))
+                {
+                    serializer.WriteObject(xml, GameStateManager.ENGINE.WORLD);
                 }
             }
             else
@@ -117,6 +131,11 @@ namespace Mars
             {
                 _enabled = !Enabled;
                 consoleTextBox.Focus = Enabled;
+                Audio.PlaySoundEffect("high_double_beep");
+            }
+            else
+            {
+                Audio.PlaySoundEffect("low_double_beep");
             }
         }
 

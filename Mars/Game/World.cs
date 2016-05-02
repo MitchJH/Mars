@@ -6,12 +6,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using System.Runtime.Serialization;
 
 namespace Mars
 {
     /// <summary>
     /// Holds the current gamestate, used for savegame serialization.
     /// </summary>
+    [DataContract]
     public class World
     {
         private WorldUI _UI;
@@ -37,6 +39,7 @@ namespace Mars
             _crewMembers = new List<CrewMember>();
             _objects = new List<GameObject>();
             _buildings = new List<Building>();
+            _planet = new Planet() { ID = "Mars", Name = "Mars", Image = "world_mars" };
             this.ClearGrid();
 
             //REMOVE
@@ -512,6 +515,7 @@ namespace Mars
             set { _tiles = value; }
         }
 
+        [DataMember]
         public Clock Clock
         {
             get { return _clock; }
@@ -536,6 +540,7 @@ namespace Mars
             set { _buildings = value; }
         }
 
+        [DataMember]
         public Planet Planet
         {
             get { return _planet; }

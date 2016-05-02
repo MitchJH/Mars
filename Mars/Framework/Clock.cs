@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Runtime.Serialization;
 
 namespace Mars
 {
@@ -16,6 +17,8 @@ namespace Mars
     // Summer = 178
     // Autumn = 142
     // Winter = 154
+
+    [DataContract]
     public class Clock
     {
         private const int DAYS_IN_MARTIAN_YEAR = 669;
@@ -32,7 +35,7 @@ namespace Mars
         private double _hours;
         private double _minutes;
         private double _seconds;
-        private double _milisecs;
+        private double _milliseconds;
 
         private ClockSpeed _clockSpeed;
         private float _clockSpeedMultiplier;
@@ -46,6 +49,9 @@ namespace Mars
             _hours = 0;
             _minutes = 0;
             _seconds = 0;
+
+            _clockSpeed = ClockSpeed.RealTime;
+            _clockSpeedMultiplier = 0;
         }
 
         public void SetClock(int years, int days, int hours, int minutes, int seconds)
@@ -68,12 +74,12 @@ namespace Mars
 
         public void Update(GameTime gameTime)
         {
-            _milisecs += (float)gameTime.ElapsedGameTime.TotalSeconds * _clockSpeedMultiplier;
+            _milliseconds += (float)gameTime.ElapsedGameTime.TotalSeconds * _clockSpeedMultiplier;
             float elapsedTime = 0;
 
-            if (_milisecs >= 1.0f)
+            if (_milliseconds >= 1.0f)
             {
-                _milisecs--;
+                _milliseconds--;
                 elapsedTime++;
             }
 
@@ -171,18 +177,6 @@ namespace Mars
             }
         }
 
-        public int Sols
-        {
-            get { return _sols; }
-            set { _sols = value; }
-        }
-
-        public Season Season
-        {
-            get { return _season; }
-            set { _season = value; }
-        }
-
         public string DebugText
         {
             get
@@ -235,6 +229,62 @@ namespace Mars
         private int HoursToSeconds(int hours)
         {
             return (hours * 60) * 60;
+        }
+
+        [DataMember]
+        public int Sols
+        {
+            get { return _sols; }
+            set { _sols = value; }
+        }
+
+        [DataMember]
+        public Season Season
+        {
+            get { return _season; }
+            set { _season = value; }
+        }
+
+        [DataMember]
+        public double Years
+        {
+            get { return _years; }
+            set { _years = value; }
+        }
+
+        [DataMember]
+        public double Days
+        {
+            get { return _days; }
+            set { _days = value; }
+        }
+
+        [DataMember]
+        public double Hours
+        {
+            get { return _hours; }
+            set { _hours = value; }
+        }
+
+        [DataMember]
+        public double Minutes
+        {
+            get { return _minutes; }
+            set { _minutes = value; }
+        }
+
+        [DataMember]
+        public double Seconds
+        {
+            get { return _seconds; }
+            set { _seconds = value; }
+        }
+
+        [DataMember]
+        public double Milliseconds
+        {
+            get { return _milliseconds; }
+            set { _milliseconds = value; }
         }
     }
 
