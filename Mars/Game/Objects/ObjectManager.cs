@@ -56,10 +56,13 @@ namespace Mars
                         bool requiresPower = bool.Parse(split[7]);
                         bool producesOxygen = bool.Parse(split[8]);
                         bool requiresOxygen = bool.Parse(split[9]);
-                        int width = int.Parse(split[10]);
-                        int height = int.Parse(split[11]);
+                        bool producesWater = bool.Parse(split[10]);
+                        bool requiresWater = bool.Parse(split[11]);
+                        int width = int.Parse(split[12]);
+                        int height = int.Parse(split[13]);
 
-                        ObjectType newObject = new ObjectType(id, name, description, sprite, isInternal, isInteractable, producesPower, requiresPower, producesOxygen, requiresOxygen, width, height);
+                        ObjectType newObject = new ObjectType(id, name, description, sprite, isInternal, isInteractable, producesPower, requiresPower, 
+                            producesOxygen, requiresOxygen, producesWater, requiresWater, width, height);
                         _objectTypes.Add(id, newObject);
                     }
                 }
