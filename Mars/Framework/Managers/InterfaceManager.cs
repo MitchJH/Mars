@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Mars
 {
-    public static class UIHandler
+    public static class InterfaceManager
     {
-        static UIHandler()
+        static InterfaceManager()
         {
             // Note from Mitch for Mitch about how to approach the UI
             // The entire screen space (Viewport) for the main map needs to be a UI component. Then we have a stack of UI elements branching from that as the parent.

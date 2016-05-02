@@ -73,5 +73,28 @@ namespace Mars
                 return _gameMousePosition;
             }
         }
+
+        public static bool LeftClick
+        {
+            get
+            {
+                if (_oldMouseState.LeftButton == ButtonState.Pressed && _currentMouseState.LeftButton == ButtonState.Released)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+        public static bool RightClick
+        {
+            get
+            {
+                if (_oldMouseState.RightButton == ButtonState.Pressed && _currentMouseState.RightButton == ButtonState.Released)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }

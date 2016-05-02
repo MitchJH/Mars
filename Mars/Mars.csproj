@@ -85,7 +85,7 @@
     <Compile Include="Framework\GUI\Primitives2D.cs" />
     <Compile Include="Framework\Settings.cs" />
     <Compile Include="Framework\ContentManagement\Sprites.cs" />
-    <Compile Include="Framework\Managers\UIHandler.cs" />
+    <Compile Include="Framework\Managers\InterfaceManager.cs" />
     <Compile Include="Framework\Version.cs" />
     <Compile Include="Game\Crew\CrewMember.cs" />
     <Compile Include="Game\Entity.cs" />

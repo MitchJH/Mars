@@ -59,6 +59,7 @@ namespace Mars
         private void ButtonBuild_Click(GUIControl sender)
         {
             GameStateManager.Mode = GameMode.Build;
+            BuildModeManager.EnterMode();
             Audio.PlaySoundEffect("high_double_beep");
         }
 

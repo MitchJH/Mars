@@ -96,11 +96,11 @@ namespace Mars
 
                 if (hoveredTile.X >= 0 && hoveredTile.Y >= 0 && hoveredTile.X < Constants.MAP_WIDTH && hoveredTile.Y < Constants.MAP_HEIGHT)
                 {
-                    if (Controls.Mouse.RightButton == ButtonState.Pressed)
+                    if (Controls.Mouse.RightButton == ButtonState.Pressed && GameStateManager.Mode == GameMode.World)
                     {
                         _tiles[hoveredTile.X, hoveredTile.Y].Type = TileType.Impassable;
                     }
-                    else if (Controls.Mouse.LeftButton == ButtonState.Pressed)
+                    else if (Controls.Mouse.LeftButton == ButtonState.Pressed && GameStateManager.Mode == GameMode.World)
                     {
                         _tiles[hoveredTile.X, hoveredTile.Y].Hovered = true;
                         _tiles[hoveredTile.X, hoveredTile.Y].Type = TileType.Passable;
@@ -108,6 +108,16 @@ namespace Mars
                     else
                     {
                         _tiles[hoveredTile.X, hoveredTile.Y].Hovered = true;
+                    }
+                }
+
+                if (GameStateManager.Mode == GameMode.Build)
+                {
+                    bool stillActive = BuildModeManager.Update(ref _tiles, hoveredTile);
+
+                    if (stillActive == false)
+                    {
+                        GameStateManager.Mode = GameMode.World;
                     }
                 }
 
@@ -242,8 +252,27 @@ namespace Mars
             }
             else if (Settings.RenderMode == TileRenderMode.IsometricDiamond)
             {
-                // DIAMOND MODE
-                for (int x = 0; x < Constants.MAP_WIDTH; x++)
+                float modeTint = 1.0f;
+                float modeTintWall = 1.0f;
+                Color highlightColour = Color.Green;
+                Color wallColourTint = Color.LightGray;
+
+                if (GameStateManager.Mode == GameMode.Build)
+                {
+                    modeTint = 0.4f;
+                    modeTintWall = 0.7f;
+
+                    if (BuildModeManager.Blocked == false)
+                        highlightColour = Color.Yellow;
+                    else
+                        highlightColour = Color.DarkRed;
+
+
+                    wallColourTint = Color.FromNonPremultiplied(40, 40, 40, 255);
+                }
+
+                    // DIAMOND MODE
+                    for (int x = 0; x < Constants.MAP_WIDTH; x++)
                 {
                     for (int y = 0; y < Constants.MAP_HEIGHT; y++)
                     {
@@ -262,22 +291,22 @@ namespace Mars
                         {
                             if (tile.Hovered)
                             {
-                                spriteBatch.Draw(iso_texture, rec, Color.Green);
+                                spriteBatch.Draw(iso_texture, rec, highlightColour);
                             }
                             else
                             {
-                                spriteBatch.Draw(iso_texture, rec, Color.White);
+                                spriteBatch.Draw(iso_texture, rec, Color.White * modeTint);
                             }
                         }
                         else
                         {
                             if (tile.Hovered)
                             {
-                                spriteBatch.Draw(iso_texture_wall, rec, Color.Green);
+                                spriteBatch.Draw(iso_texture_wall, rec, highlightColour);
                             }
                             else
                             {
-                                spriteBatch.Draw(iso_texture_wall, rec, Color.LightGray);
+                                spriteBatch.Draw(iso_texture_wall, rec, wallColourTint * modeTintWall);
                             }
                         }
 
