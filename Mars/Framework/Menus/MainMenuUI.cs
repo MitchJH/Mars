@@ -128,6 +128,8 @@ namespace Mars
                 (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Width / 2) - (stringSize / 2),
                 GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height - 20);
 
+            _quote.Text = Audio.SongPosition;
+
             if (showMenu)
             {
                 if (_menuForm.Position.X < menuRectangle.X)

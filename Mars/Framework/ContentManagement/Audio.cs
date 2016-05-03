@@ -132,5 +132,14 @@ namespace Mars
             get { return _MISSING_AUDIO; }
             set { _MISSING_AUDIO = value; }
         }
+
+        public static string SongPosition
+        {
+            get
+            {
+                TimeSpan time = MediaPlayer.PlayPosition;
+                return time.Minutes.ToString() + ":" + time.Seconds.ToString();
+            }
+        }
     }
 }
