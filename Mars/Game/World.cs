@@ -120,6 +120,15 @@ namespace Mars
                         GameStateManager.Mode = GameMode.World;
                     }
                 }
+                else if(GameStateManager.Mode == GameMode.Pipe)
+                {
+                    bool stillActive = PipeModeManager.Update(ref _tiles, hoveredTile);
+
+                    if (stillActive == false)
+                    {
+                        GameStateManager.Mode = GameMode.World;
+                    }
+                }
 
                 //Update crew in real time.
                 foreach (CrewMember c in _crewMembers)
@@ -192,9 +201,13 @@ namespace Mars
             DebugTextManager.AddWatcher(GameStateManager.Mode, "Current Mode = ");
             DebugTextManager.AddWatcher(mousePosition, "Mouse Position =");
             DebugTextManager.AddWatcher(ConvertToTile(mousePosition), "Mouse Tile Position =");
+
+            /* Crew Member Stuff
+             * 
             DebugTextManager.AddWatcher(_crewMembers[0].Position, "Crew " + _crewMembers[0].Name + " Position =");
             DebugTextManager.AddWatcher(ConvertToTile(_crewMembers[0].Position), "Crew " + _crewMembers[0].Name + " Tile Position =");
             DebugTextManager.AddWatcher(_crewMembers[0].Selected, "Crew " + _crewMembers[0].Name + " Selected =");
+            */
 
             // Check for exit.
             if (Controls.Keyboard.IsKeyDown(Keys.Escape))
@@ -256,7 +269,7 @@ namespace Mars
                 float modeTintWall = 1.0f;
                 Color highlightColour = Color.Green;
                 Color wallColourTint = Color.LightGray;
-
+                
                 if (GameStateManager.Mode == GameMode.Build)
                 {
                     modeTint = 0.4f;
@@ -270,9 +283,22 @@ namespace Mars
 
                     wallColourTint = Color.FromNonPremultiplied(40, 40, 40, 255);
                 }
+                else if (GameStateManager.Mode == GameMode.Pipe)
+                {
+                    modeTint = 0.9f;
+                    modeTintWall = 0.9f;
 
-                    // DIAMOND MODE
-                    for (int x = 0; x < Constants.MAP_WIDTH; x++)
+                    if (BuildModeManager.Blocked == false)
+                        highlightColour = Color.Aqua;
+                    else
+                        highlightColour = Color.DarkRed;
+
+
+                    wallColourTint = Color.FromNonPremultiplied(40, 40, 40, 255);
+                }
+
+                // DIAMOND MODE
+                for (int x = 0; x < Constants.MAP_WIDTH; x++)
                 {
                     for (int y = 0; y < Constants.MAP_HEIGHT; y++)
                     {

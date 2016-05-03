@@ -62,6 +62,7 @@
     <Compile Include="Framework\Controls.cs" />
     <Compile Include="Framework\DebugConsole.cs" />
     <Compile Include="Framework\ContentManagement\Fonts.cs" />
+    <Compile Include="Framework\Managers\PipeModeManager.cs" />
     <Compile Include="Framework\Managers\DebugTextManager.cs" />
     <Compile Include="Framework\FrameRateCounter.cs" />
     <Compile Include="Framework\Managers\GameStateManager.cs" />
@@ -93,10 +94,12 @@
     <Compile Include="Game\Objects\GameObject.cs" />
     <Compile Include="Game\Objects\ObjectManager.cs" />
     <Compile Include="Game\Objects\ObjectTypes.cs" />
+    <Compile Include="Game\PipeManager.cs" />
     <Compile Include="Game\Planet.cs" />
     <Compile Include="Game\Buildings\Building.cs" />
     <Compile Include="Game\Buildings\BuildingManager.cs" />
     <Compile Include="Game\Buildings\BuildingType.cs" />
+    <Compile Include="Game\Pipe.cs" />
     <Compile Include="Game\Tile.cs" />
     <Compile Include="Game\World.cs" />
     <Compile Include="Program.cs" />
