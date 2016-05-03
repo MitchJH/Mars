@@ -182,6 +182,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Audio\Music\main_menu_ogg.ogg" />
     <None Include="Content\Fonts\ButtonText.spritefont" />
     <None Include="Content\Fonts\ButtonText2.spritefont" />
     <None Include="Content\Fonts\Console.spritefont" />

@@ -445,3 +445,9 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UI/Buttons/world.png
 
+#begin Audio/Music/main_menu_ogg.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/main_menu_ogg.ogg
+

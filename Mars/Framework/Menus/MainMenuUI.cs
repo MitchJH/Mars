@@ -110,7 +110,7 @@ namespace Mars
 
             // MAIN MENU MUSIC
             Audio.Repeat = true;
-            Audio.PlayMusicTrack("main_menu");
+            Audio.PlayMusicTrack("main_menu_ogg");
         }
 
         public override void Update()
