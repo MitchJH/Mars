@@ -20,6 +20,7 @@ namespace Mars
         private Vector2 _center;
         private TileType _type;
         private bool _hovered;
+        private Pipe _pipe;
 
         public Tile(int x, int y)
         {
@@ -77,6 +78,17 @@ namespace Mars
         {
             get { return _hovered; }
             set { _hovered = value; }
+        }
+
+        public Pipe Pipe
+        {
+            get { return _pipe; }
+            set { _pipe = value; }
+        }
+
+        public void AddNewPipe(PipeType type)
+        {
+            _pipe = new Pipe(type);
         }
 
         public static Point WorldToMapCell(Point worldPoint, out Point localPoint)
