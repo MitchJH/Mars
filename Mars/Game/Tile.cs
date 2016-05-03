@@ -86,11 +86,6 @@ namespace Mars
             set { _pipe = value; }
         }
 
-        public void AddNewPipe(PipeType type)
-        {
-            _pipe = new Pipe(type);
-        }
-
         public static Point WorldToMapCell(Point worldPoint, out Point localPoint)
         {
             if (Settings.RenderMode == TileRenderMode.Cartesian)

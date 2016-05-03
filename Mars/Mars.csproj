@@ -142,6 +142,7 @@
     <Content Include="Content\Textures\iso.png" />
     <Content Include="Content\Textures\iso2.png" />
     <Content Include="Content\Textures\isob.png" />
+    <Content Include="Content\Textures\iso_pipe.png" />
     <Content Include="Content\Textures\missing.png" />
     <Content Include="Content\Textures\missing2.png" />
     <Content Include="Content\Textures\mousemap - Copy %282%29.png" />

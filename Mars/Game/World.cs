@@ -28,6 +28,7 @@ namespace Mars
         private bool active_selection = false;
         Texture2D tile_texture;
         Texture2D iso_texture;
+        Texture2D iso_pipe_texture;
         Texture2D iso_texture_wall;
         private Vector2 mousePosition;
 
@@ -46,6 +47,7 @@ namespace Mars
             tile_texture = content.Load<Texture2D>("Textures/tile");
             iso_texture = content.Load<Texture2D>("Textures/iso");
             iso_texture_wall = content.Load<Texture2D>("Textures/isob");
+            iso_pipe_texture = content.Load<Texture2D>("Textures/iso_pipe");
             _crewMembers.Add(new CrewMember("Darren", 23, 1400, 800, "crew"));
             mousePosition = new Vector2(0, 0);
     }
@@ -288,7 +290,7 @@ namespace Mars
                     modeTint = 0.9f;
                     modeTintWall = 0.9f;
 
-                    if (BuildModeManager.Blocked == false)
+                    if (PipeModeManager.Blocked == false)
                         highlightColour = Color.Aqua;
                     else
                         highlightColour = Color.DarkRed;
@@ -333,6 +335,15 @@ namespace Mars
                             else
                             {
                                 spriteBatch.Draw(iso_texture_wall, rec, wallColourTint * modeTintWall);
+                            }
+                        }
+
+                        //If we're in pipe mode, display the pipe tiles.
+                        if (GameStateManager.Mode == GameMode.Pipe)
+                        {
+                            if (tile.Pipe != null)
+                            {
+                                spriteBatch.Draw(iso_pipe_texture, rec, Color.White);
                             }
                         }
 
