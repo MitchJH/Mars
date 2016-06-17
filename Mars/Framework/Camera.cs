@@ -189,6 +189,16 @@ namespace Mars
             get { return _target; }
         }
 
+        public static string DebugInfo
+        {
+            get
+            {
+                return "{X: " + Camera.Position.X.ToString("N2") + ", " +
+                    "Y: " + Camera.Position.Y.ToString("N2") + ", " +
+                    "Z: " + Camera.Zoom.ToString("N3") + "}";
+            }
+        }
+
         // EXTENSION METHODS
         public static bool IsInCameraView(this MouseState state)
         {

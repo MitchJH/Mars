@@ -101,6 +101,7 @@
     <Compile Include="Game\Buildings\BuildingType.cs" />
     <Compile Include="Game\Pipe.cs" />
     <Compile Include="Game\Tile.cs" />
+    <Compile Include="Game\TileMap.cs" />
     <Compile Include="Game\World.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,8 +142,8 @@
     <Content Include="Content\Textures\hex.png" />
     <Content Include="Content\Textures\iso.png" />
     <Content Include="Content\Textures\iso2.png" />
-    <Content Include="Content\Textures\isob.png" />
     <Content Include="Content\Textures\iso_pipe.png" />
+    <Content Include="Content\Textures\iso_wall.png" />
     <Content Include="Content\Textures\missing.png" />
     <Content Include="Content\Textures\missing2.png" />
     <Content Include="Content\Textures\mousemap - Copy %282%29.png" />

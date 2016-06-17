@@ -1,5 +1,5 @@
 # ID, Filepath
 crew,Textures/person
-bed1,Textures/bed1
-bed2,Textures/bed2
-bed3,Textures/bed3
+tile,Textures/iso
+tile_wall,Textures/iso_wall
+tile_pipe,Textures/iso_pipe

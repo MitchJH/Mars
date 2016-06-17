@@ -121,12 +121,6 @@ namespace Mars
             if (GameStateManager.State == GameState.GameWorld)
             {
                 WORLD.Update(gameTime);
-
-                // DEBUG INFORMATION
-                this.Window.Title = "DEBUG - " +
-                    "(Mouse: " + (int)Controls.GameMousePosition.X + ":" + (int)Controls.GameMousePosition.Y + ") " +
-                    "(Camera : X:" + Camera.Position.X.ToString("N2") + ", Y:" + Camera.Position.Y.ToString("N2") + ", Zoom:" + Camera.Zoom.ToString("N3") + ") " +
-                    "(" + WORLD.Clock.DebugText + ")";
             }
             else if (GameStateManager.State == GameState.MainMenu)
             {

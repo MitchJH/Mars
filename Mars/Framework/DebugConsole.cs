@@ -92,7 +92,7 @@ namespace Mars
             }
             else if (command == "clear")
             {
-                GameStateManager.ENGINE.WORLD.ClearGrid();
+                GameStateManager.ENGINE.WORLD.TileMap.ClearTiles();
             }
             else if (command == "camerapos")
             {
