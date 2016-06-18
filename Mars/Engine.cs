@@ -60,8 +60,8 @@ namespace Mars
         {
             // Create the camera
             Camera.Create(GraphicsDevice.Viewport);
-            Camera.Position = new Vector2(-422, 924);
-            Camera.Zoom = 0.366f;
+            Camera.Position = new Vector2(0, 0);
+            Camera.Zoom = 1.0f;
 
             base.Initialize();
         }
@@ -73,25 +73,24 @@ namespace Mars
             // Load the base textures
             Sprites.MISSING_TEXTURE = Content.Load<Texture2D>("Textures/missing");
             Sprites.PIXEL = Content.Load<Texture2D>("Textures/pixel");
-            Sprites.MOUSE_MAP = Content.Load<Texture2D>("Textures/mousemap");
 
             // Load the localization file
             Localization.LoadLocalization();
 
             // Load all fonts
-            Fonts.LoadFontBank("Content/Data/fontbank.txt", Content);
+            Fonts.LoadFonts("Content/Data/fonts.txt", Content);
 
             // Load all game sprites
-            Sprites.LoadSpriteBank("Content/Data/spritebank.txt", Content);
+            Sprites.LoadSprites("Content/Data/sprites.txt", Content);
 
             // Load all sound effects
-            Audio.LoadSoundBank("Content/Data/soundbank.txt", Content);
+            Audio.LoadSounds("Content/Data/sounds.txt", Content);
 
             // Load all object types
-            ObjectManager.LoadObjectBank("Content/Data/objectbank.txt", Content);
+            ObjectManager.LoadObjects("Content/Data/objects.txt", Content);
 
             // Load all building types
-            BuildingManager.LoadBuildingBank("Content/Data/buildingbank.txt", Content);
+            BuildingManager.LoadBuildings("Content/Data/buildings.txt", Content);
 
             // Enable the FPS counter
             FrameRateCounter.Enable();

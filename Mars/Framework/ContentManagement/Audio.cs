@@ -24,13 +24,14 @@ namespace Mars
             _music = new Dictionary<string, Song>();
         }
 
-        public static void LoadSoundBank(string file, ContentManager content)
+        public static void LoadSounds(string file, ContentManager content)
         {
             using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
+                    line = line.ToLower();
                     if (line.StartsWith("#") == false && string.IsNullOrEmpty(line) == false)
                     {
                         string[] split = line.Split(',');
@@ -60,13 +61,15 @@ namespace Mars
         /// <returns>True if sound was found and played</returns>
         public static bool PlaySoundEffect(string key)
         {
+            string keyL = key.ToLower();
+
             if (Settings.EffectsOn == false) return false;
 
-            if (string.IsNullOrEmpty(key) == false)
+            if (string.IsNullOrEmpty(keyL) == false)
             {
-                if (_sounds.ContainsKey(key))
+                if (_sounds.ContainsKey(keyL))
                 {
-                    SoundEffectInstance sei = _sounds[key].CreateInstance();
+                    SoundEffectInstance sei = _sounds[keyL].CreateInstance();
                     sei.Volume = ApplyMasterVolume(Settings.EffectVolume);
                     sei.Play();
                     return true;
@@ -78,14 +81,16 @@ namespace Mars
 
         public static bool PlayMusicTrack(string key)
         {
+            string keyL = key.ToLower();
+
             if (Settings.MusicOn == false) return false;
 
-            if (string.IsNullOrEmpty(key) == false)
+            if (string.IsNullOrEmpty(keyL) == false)
             {
-                if (_music.ContainsKey(key))
+                if (_music.ContainsKey(keyL))
                 {
                     MediaPlayer.Volume = ApplyMasterVolume(Settings.MusicVolume);
-                    MediaPlayer.Play(_music[key]);
+                    MediaPlayer.Play(_music[keyL]);
                     return true;
                 }
             }
@@ -95,11 +100,13 @@ namespace Mars
 
         public static SoundEffect GetSoundEffect(string key)
         {
-            if (string.IsNullOrEmpty(key) == false)
+            string keyL = key.ToLower();
+
+            if (string.IsNullOrEmpty(keyL) == false)
             {
-                if (_sounds.ContainsKey(key))
+                if (_sounds.ContainsKey(keyL))
                 {
-                    return _sounds[key];
+                    return _sounds[keyL];
                 }
             }
             return _MISSING_AUDIO;

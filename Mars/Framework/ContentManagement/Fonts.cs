@@ -18,13 +18,14 @@ namespace Mars
             _fonts = new Dictionary<string, SpriteFont>();
         }
 
-        public static void LoadFontBank(string file, ContentManager content)
+        public static void LoadFonts(string file, ContentManager content)
         {
             using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
+                    line = line.ToLower();
                     if (line.StartsWith("#") == false)
                     {
                         string[] split = line.Split(',');
@@ -40,21 +41,38 @@ namespace Mars
 
         public static SpriteFont Get(string key)
         {
-            if (string.IsNullOrEmpty(key) == false)
+            string keyL = key.ToLower();
+            if (string.IsNullOrEmpty(keyL) == false)
             {
-                if (_fonts.ContainsKey(key))
+                if (_fonts.ContainsKey(keyL))
                 {
-                    return _fonts[key];
+                    return _fonts[keyL];
                 }
             }
+
+#if DEBUG
+            throw new Exception("Debug Only Exception - Missing Font [\"" + key + "\"]");
+#else
             return null;
+#endif
         }
 
         public static SpriteFont Standard
         {
             get
             {
-                return _fonts["Standard"];
+                if (_fonts.ContainsKey("standard"))
+                {
+                    return _fonts["standard"];
+                }
+                else
+                {
+#if DEBUG
+                    throw new Exception("Debug Only Exception - Cannot find Standard font");
+#else
+                    return null;
+#endif
+                }
             }
         }
     }

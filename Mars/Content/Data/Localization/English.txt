@@ -1,1 +1,1 @@
-testkey,teststring
+copyright,Copyright © Mitchell Heastie 2016

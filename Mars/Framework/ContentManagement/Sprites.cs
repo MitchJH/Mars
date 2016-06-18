@@ -13,7 +13,6 @@ namespace Mars
     {
         private static Texture2D _MISSING_TEXTURE;
         private static Texture2D _PIXEL;
-        private static Texture2D _MOUSE_MAP;
 
         private static Dictionary<string, Texture2D> _sprites;
 
@@ -41,13 +40,14 @@ namespace Mars
             */
         }
 
-        public static void LoadSpriteBank(string file, ContentManager content)
+        public static void LoadSprites(string file, ContentManager content)
         {
             using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
+                    line = line.ToLower();
                     if (line.StartsWith("#") == false && string.IsNullOrEmpty(line) == false)
                     {
                         string[] split = line.Split(',');
@@ -63,11 +63,12 @@ namespace Mars
 
         public static Texture2D Get(string key)
         {
-            if (string.IsNullOrEmpty(key) == false)
+            string keyL = key.ToLower();
+            if (string.IsNullOrEmpty(keyL) == false)
             {
-                if (_sprites.ContainsKey(key))
+                if (_sprites.ContainsKey(keyL))
                 {
-                    return _sprites[key];
+                    return _sprites[keyL];
                 }
             }
             return _MISSING_TEXTURE;
@@ -83,12 +84,6 @@ namespace Mars
         {
             get { return _PIXEL; }
             set { _PIXEL = value; }
-        }
-
-        public static Texture2D MOUSE_MAP
-        {
-            get { return _MOUSE_MAP; }
-            set { _MOUSE_MAP = value; }
         }
     }
 }

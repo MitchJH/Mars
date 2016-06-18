@@ -26,7 +26,7 @@ namespace Mars
                 t.Hovered = false;
             }
 
-            Point hoveredTileLocation = TileAtCoordinates(Controls.MousePosition.Cartesian);
+            Point hoveredTileLocation = TileAtCoordinates(Controls.MouseWorldPosition);
             Tile hoveredTile = TileAtPosition(hoveredTileLocation);
 
             // Check we are within the TileMap
@@ -62,52 +62,37 @@ namespace Mars
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
 
-            if (GameStateManager.Mode == GameMode.Build)
-            {
-            }
-            else if (GameStateManager.Mode == GameMode.Build)
-            {
-            }
-            else if (GameStateManager.Mode == GameMode.Pipe)
-            {
-            }
-
-            // DIAMOND MODE
             for (int x = 0; x < Constants.MAP_WIDTH; x++)
             {
                 for (int y = 0; y < Constants.MAP_HEIGHT; y++)
                 {
                     Tile tile = _tiles[x, y];
 
-                    double tileX = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
-                    double tileY = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
+                    double tileX = x * Constants.TILE_WIDTH;
+                    double tileY = y * Constants.TILE_HEIGHT;
 
-                    Rectangle tileRectangle = new Rectangle(
-                                (int)tileX,
-                                (int)tileY + Constants.TILE_DEPTH,
-                                Constants.TILE_WIDTH,
-                                Constants.TILE_WIDTH + Constants.TILE_DEPTH);
+                    Rectangle tileRectangle = new Rectangle((int)tileX, (int)tileY, Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
 
                     if (tile.Type != TileType.Impassable)
                     {
                         if (tile.Hovered)
                         {
-                            spriteBatch.Draw(Sprites.Get("tile"), tileRectangle, Color.Green);
+                            spriteBatch.Draw(Sprites.Get("Tile"), tileRectangle, Color.Green);
                         }
                         else
                         {
-                            spriteBatch.Draw(Sprites.Get("tile"), tileRectangle, Color.White);
+                            spriteBatch.Draw(Sprites.Get("Tile"), tileRectangle, Color.White);
                         }
                     }
                     else
                     {
                         if (tile.Hovered)
                         {
-                            spriteBatch.Draw(Sprites.Get("tile_wall"), tileRectangle, Color.Green);
+                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.Green);
                         }
                         else
                         {
-                            spriteBatch.Draw(Sprites.Get("tile_wall"), tileRectangle, Color.LightGray);
+                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.LightGray);
                         }
                     }
 
@@ -150,12 +135,9 @@ namespace Mars
         public Point TileAtCoordinates(Vector2 cartesian)
         {            
             double xTile = cartesian.X / Constants.TILE_WIDTH;
-            double yTile = (cartesian.Y - Constants.TILE_DEPTH - Constants.TILE_HEIGHT) / Constants.TILE_HEIGHT;
+            double yTile = cartesian.Y / Constants.TILE_HEIGHT;
 
-            int hitX = (int)((xTile + yTile) - 0.5);
-            int hitY = (int)((yTile - xTile) + 0.5);
-
-            Point tilePos = new Point(hitX, hitY);
+            Point tilePos = new Point((int)xTile, (int)yTile);
             return tilePos;
         }
 

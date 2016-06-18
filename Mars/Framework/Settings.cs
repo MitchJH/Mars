@@ -13,7 +13,6 @@ namespace Mars
         private static string appDataPath;
         // General Settings
         private static WindowMode _windowMode;
-        private static TileRenderMode _renderMode;
         private static GameState _startingGameState;
         private static int _X_resolution;
         private static int _Y_resolution;
@@ -41,7 +40,6 @@ namespace Mars
 
             // General
             _windowMode = WindowMode.Fullscreen;
-            _renderMode = TileRenderMode.IsometricDiamond;
             _startingGameState = GameState.MainMenu;
             _X_resolution = screenWidth;
             _Y_resolution = screenHeight;
@@ -72,10 +70,6 @@ namespace Mars
                     if (setting.StartsWith("window_mode"))
                     {
                         _windowMode = (WindowMode)Enum.Parse(typeof(WindowMode), value);
-                    }
-                    else if (setting.StartsWith("render_mode"))
-                    {
-                        _renderMode = (TileRenderMode)Enum.Parse(typeof(TileRenderMode), value);
                     }
                     else if (setting.StartsWith("starting_game_state"))
                     {
@@ -169,7 +163,6 @@ namespace Mars
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("# GENERAL SETTINGS");
             sb.AppendLine("window_mode " + _windowMode.ToString() + GetEnumListString(_windowMode));
-            sb.AppendLine("render_mode " + _renderMode.ToString() + GetEnumListString(_renderMode));
             sb.AppendLine("starting_game_state " + _startingGameState.ToString() + GetEnumListString(_startingGameState));
             sb.AppendLine("x_res " + _X_resolution.ToString());
             sb.AppendLine("y_res " + _Y_resolution.ToString());
@@ -237,13 +230,6 @@ namespace Mars
         {
             get { return Settings._windowMode; }
             set { Settings._windowMode = value; }
-        }
-
-
-        public static TileRenderMode RenderMode
-        {
-            get { return _renderMode; }
-            set { _renderMode = value; }
         }
 
         public static GameState StartingGameState
@@ -353,12 +339,5 @@ namespace Mars
         Windowed,
         Borderless,
         Fullscreen
-    }
-
-    public enum TileRenderMode
-    {
-        Cartesian,
-        IsometricDiamond,
-        IsometricStaggered
     }
 }

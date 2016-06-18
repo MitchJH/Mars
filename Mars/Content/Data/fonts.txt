@@ -1,7 +1,4 @@
 # ID, Filepath
 Standard,Fonts/Standard
-ButtonText,Fonts/ButtonText
 Tiny,Fonts/Tiny
-Menu,Fonts/MainMenu
-Quote,Fonts/Quote
 Console,Fonts/Console

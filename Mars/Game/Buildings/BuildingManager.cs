@@ -35,8 +35,10 @@ namespace Mars
             return null;
         }
 
-        public static void LoadBuildingBank(string file, ContentManager content)
+        public static void LoadBuildings(string file, ContentManager content)
         {
+            if (File.Exists(file) == false) return;
+
             using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
             {
                 string line;

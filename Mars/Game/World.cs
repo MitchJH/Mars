@@ -26,7 +26,7 @@ namespace Mars
 
         public World(ContentManager content)
         {
-            _UI = new WorldUI("World", content);
+            _UI = new GameUI("World");
             _tileMap = new TileMap(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
             _clock = new Clock();
             _crewMembers = new List<CrewMember>();
@@ -69,9 +69,8 @@ namespace Mars
             // Update Debug Text
             DebugTextManager.Update(gameTime);
             DebugTextManager.AddWatcher(Camera.DebugInfo, "Camera: ");
-            DebugTextManager.AddWatcher(Controls.MousePosition.Screen, "Mouse Screen: ");
-            DebugTextManager.AddWatcher(Controls.MousePosition.Cartesian, "Mouse Cartesian: ");
-            DebugTextManager.AddWatcher(Controls.MousePosition.Isometric, "Mouse Isometric: ");
+            DebugTextManager.AddWatcher(Controls.MouseWorldPosition, "Mouse World Position: ");
+            DebugTextManager.AddWatcher(Controls.MouseScreenPosition, "Mouse Screen Position: ");
             DebugTextManager.AddWatcher(GameStateManager.Mode, "GameMode: ");
 
             // Check for exit to Main Menu

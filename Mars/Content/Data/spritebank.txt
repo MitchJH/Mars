@@ -1,5 +1,0 @@
-# ID, Filepath
-crew,Textures/person
-tile,Textures/iso
-tile_wall,Textures/iso_wall
-tile_pipe,Textures/iso_pipe

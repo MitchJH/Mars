@@ -42,18 +42,6 @@ namespace Mars
             {
                 GameStateManager.State = GameState.Exit;
             }
-            else if (command == "rendermode 1")
-            {
-                Settings.RenderMode = TileRenderMode.Cartesian;
-            }
-            else if (command == "rendermode 2")
-            {
-                Settings.RenderMode = TileRenderMode.IsometricDiamond;
-            }
-            else if (command == "rendermode 3")
-            {
-                Settings.RenderMode = TileRenderMode.IsometricStaggered;
-            }
             else if (command == "fullscreen")
             {
                 GameStateManager.ENGINE.Window.IsBorderless = false;

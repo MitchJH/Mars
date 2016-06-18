@@ -16,11 +16,13 @@ namespace Mars
         private static MouseState _oldMouseState;
         private static KeyboardState _oldKeyboardState;
 
-        private static MousePosition _mousePosition;
+        private static Vector2 _mouseWorldPosition;
+        private static Vector2 _mouseScreenPosition;
 
         static Controls()
         {
-            _mousePosition = new MousePosition();
+            _mouseWorldPosition = Vector2.Zero;
+            _mouseScreenPosition = Vector2.Zero;
         }
 
         public static void Update()
@@ -31,7 +33,8 @@ namespace Mars
             _currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             _currentKeyboardState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
 
-            _mousePosition.Update(_currentMouseState);
+            _mouseScreenPosition = new Vector2(_currentMouseState.X, _currentMouseState.Y);
+            _mouseWorldPosition = Vector2.Transform(_mouseScreenPosition, Camera.InverseTransform);
         }
 
         public static MouseState Mouse
@@ -67,13 +70,26 @@ namespace Mars
         }
 
         /// <summary>
-        /// Helper class to get various Mouse Position translations.
+        /// The position of the mouse in Cartesian World coordinates.
+        /// (The Camera Matrix Transformation HAS been applied)
         /// </summary>
-        public static MousePosition MousePosition
+        public static Vector2 MouseWorldPosition
         {
             get
             {
-                return _mousePosition;
+                return _mouseWorldPosition;
+            }
+        }
+
+        /// <summary>
+        /// The position of the mouse on the screen.
+        /// (The Camera Matrix Transformation has NOT been applied)
+        /// </summary>
+        public static Vector2 MouseScreenPosition
+        {
+            get
+            {
+                return _mouseScreenPosition;
             }
         }
 
@@ -97,63 +113,6 @@ namespace Mars
                     return true;
                 }
                 return false;
-            }
-        }
-    }
-
-    public class MousePosition
-    {
-        private Vector2 _mouseCartesianPosition;
-        private Vector2 _mouseIsometricPosition;
-        private Vector2 _mouseScreenPosition;
-
-        public MousePosition()
-        {
-            _mouseCartesianPosition = Vector2.Zero;
-            _mouseIsometricPosition = Vector2.Zero;
-            _mouseScreenPosition = Vector2.Zero;
-        }
-
-        public void Update(MouseState currentMouseState)
-        {
-            _mouseScreenPosition = new Vector2(currentMouseState.X, currentMouseState.Y);
-            _mouseCartesianPosition = Vector2.Transform(_mouseScreenPosition, Camera.InverseTransform);
-            _mouseIsometricPosition = new Vector2(_mouseCartesianPosition.X + _mouseCartesianPosition.Y, _mouseCartesianPosition.Y - _mouseCartesianPosition.X);
-        }
-
-        /// <summary>
-        /// The position of the mouse in Cartesian World coordinates.
-        /// (The Camera Matrix Transformation HAS been applied)
-        /// </summary>
-        public Vector2 Cartesian
-        {
-            get
-            {
-                return _mouseCartesianPosition;
-            }
-        }
-
-        /// <summary>
-        /// The position of the mouse in Isometric World coordinates.
-        /// (The coordinates have been converted from Cartesian to Isometric)
-        /// </summary>
-        public Vector2 Isometric
-        {
-            get
-            {
-                return _mouseIsometricPosition;
-            }
-        }
-
-        /// <summary>
-        /// The position of the mouse on the screen.
-        /// (The Camera Matrix Transformation has NOT been applied)
-        /// </summary>
-        public Vector2 Screen
-        {
-            get
-            {
-                return _mouseScreenPosition;
             }
         }
     }

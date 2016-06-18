@@ -16,19 +16,13 @@ namespace Mars
         /// <summary>The copyright displayed in the game.</summary>
         public const string GAME_COPYRIGHT = "Copyright © DAM Games 2016";
         /// <summary>The background colour for the renderer.</summary>
-        public readonly static Color BACK_COLOUR = Color.Black;//Color.FromNonPremultiplied(100, 100, 100, 255);
+        public readonly static Color BACK_COLOUR = Color.Black;
 
         // TILE MAP
         /// <summary>The width of a game tile.</summary>
-        public const int TILE_WIDTH = 128;
+        public const int TILE_WIDTH = 32;
         /// <summary>The height of a game tile.</summary>
-        public const int TILE_HEIGHT = 64;
-        /// <summary>Half of a tiles width to offset the row below.</summary>
-        public const int ROW_OFFSET = TILE_WIDTH / 2;
-        /// <summary>Quater of a tiles height to offset the next row.</summary>
-        public const int ROW_STEP = TILE_WIDTH / 4;
-        /// <summary>Excess height at the bottom of a tile to give a depth effect.</summary>
-        public const int TILE_DEPTH = 10;
+        public const int TILE_HEIGHT = 32;
         /// <summary>Width of the map in tiles.</summary>
         public const int MAP_WIDTH = 40;
         /// <summary>Height of the map in tiles.</summary>

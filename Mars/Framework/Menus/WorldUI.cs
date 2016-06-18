@@ -14,10 +14,10 @@ namespace Mars
         public WorldUI(string ID, ContentManager content)
             : base(ID)
         {
-            Texture2D buttonWorldTexture = content.Load<Texture2D>("Textures/UI/Buttons/world");
-            Texture2D buttonBuildTexture = content.Load<Texture2D>("Textures/UI/Buttons/build");
-            Texture2D buttonPipeTexture = content.Load<Texture2D>("Textures/UI/Buttons/pipe");
-            Texture2D buttonWireTexture = content.Load<Texture2D>("Textures/UI/Buttons/wire");
+            Texture2D buttonWorldTexture = content.Load<Texture2D>("Textures/UI/Buttons/square");
+            Texture2D buttonBuildTexture = content.Load<Texture2D>("Textures/UI/Buttons/square");
+            Texture2D buttonPipeTexture = content.Load<Texture2D>("Textures/UI/Buttons/square");
+            Texture2D buttonWireTexture = content.Load<Texture2D>("Textures/UI/Buttons/square");
             Point buttonSize = new Point(40, 40);
             SpriteFont buttonFont = Fonts.Get("Menu");
 

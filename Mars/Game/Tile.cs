@@ -16,34 +16,24 @@ namespace Mars
 
     public class Tile : IPathNode<Object>
     {
-        private Point _position;
+        private Point _index;
         private Vector2 _center;
+        private Rectangle _position;
         private TileType _type;
         private bool _hovered;
         private Pipe _pipe;
 
         public Tile(int x, int y)
         {
-            _position = new Point(x, y);
+            _index = new Point(x, y);
             _hovered = false;
 
-            //CARTESIAN
-            //_center = new Vector2((x * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2), (y * Constants.TILE_WIDTH) + (Constants.TILE_WIDTH / 2));
+            float tile_pos_x = x * Constants.TILE_WIDTH;
+            float tile_pos_y = x * Constants.TILE_HEIGHT;
 
-            //DIAMOND
-            double tile_pos_x = x * Constants.TILE_WIDTH / 2 - y * Constants.TILE_WIDTH / 2;
-            double tile_pos_y = x * Constants.TILE_HEIGHT / 2 + y * Constants.TILE_HEIGHT / 2;
+            _center = new Vector2(tile_pos_x + (Constants.TILE_WIDTH / 2), tile_pos_y + (Constants.TILE_WIDTH / 2));
 
-            Rectangle rec = new Rectangle(
-                        (int)tile_pos_x,
-                        (int)tile_pos_y + Constants.TILE_DEPTH,
-                        Constants.TILE_WIDTH,
-                        Constants.TILE_WIDTH + Constants.TILE_DEPTH);
-
-            float r1 = rec.X + (Constants.TILE_WIDTH / 2);
-            float r2 = rec.Y + (Constants.TILE_WIDTH - Constants.TILE_HEIGHT / 2);
-
-            _center = new Vector2(r1, r2);
+            _position = new Rectangle((int)tile_pos_x, (int)tile_pos_y, Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
         }
         
         public bool IsWalkable(Object unused)
@@ -56,16 +46,22 @@ namespace Mars
             return false;
         }
 
-        public Point Position
+        public Point Index
         {
-            get { return _position; }
-            set { _position = value; }
+            get { return _index; }
+            set { _index = value; }
         }
 
         public Vector2 Center
         {
             get { return _center; }
             set { _center = value; }
+        }
+
+        public Rectangle Position
+        {
+            get { return _position; }
+            set { _position = value; }
         }
 
         public TileType Type

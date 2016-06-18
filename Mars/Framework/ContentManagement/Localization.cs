@@ -36,7 +36,7 @@ namespace Mars
         /// </summary>
         public static void LoadLocalization()
         {
-            using (var reader = new StreamReader(TitleContainer.OpenStream("Content/Data/Localization/" + _language.ToString() + ".txt")))
+            using (var reader = new StreamReader(TitleContainer.OpenStream("Content/Data/Localization/" + _language.ToString() + ".txt"), Encoding.Default, true))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -44,7 +44,7 @@ namespace Mars
                     if (line.StartsWith("#") == false && string.IsNullOrEmpty(line) == false)
                     {
                         string[] split = line.Split(',');
-                        string key = split[0];
+                        string key = split[0].ToLower();
                         string text = split[1];
                         _textValues.Add(key, text);
                     }
@@ -59,9 +59,10 @@ namespace Mars
         /// <returns>A localized string</returns>
         public static string Get(string key)
         {
-            if (_textValues.ContainsKey(key))
+            string keyL = key.ToLower();
+            if (_textValues.ContainsKey(keyL))
             {
-                return _textValues[key];
+                return _textValues[keyL];
             }
             else
             {

@@ -14,13 +14,14 @@ namespace Mars
         private Random rand = new Random();
         private bool showMenu = false;
         private float fadeIn = -0.01f;
+        private Rectangle _screen;
 
         private PictureBox _background;
         private Form _menuForm;
         private Rectangle menuRectangle;
         private Button _sfx_toggle;
         private Button _music_toggle;
-        private Label _quote;
+        private Label _copyright;
 
         private Texture2D soundTexture;
         private Texture2D soundTexture_off;
@@ -30,27 +31,28 @@ namespace Mars
         public MainMenuUI(string ID, Rectangle screen, ContentManager content)
             : base(ID)
         {
-            Texture2D backgroundImage = content.Load<Texture2D>("Textures/UI/mars_bg");
+            _screen = screen;
+            Texture2D backgroundImage = Sprites.Get("main_menu_background");
             _background = new PictureBox("mainMenuBackground", new Rectangle(100, 100, 100, 100), backgroundImage, SizeMode.CenterImage);
 
-            Texture2D menuTexture = content.Load<Texture2D>("Textures/UI/menu");
+            Texture2D menuTexture = Sprites.Get("main_menu");
             Point menuPos = new Point((screen.Width / 2) - (menuTexture.Width / 2), (screen.Height / 2) - (menuTexture.Height / 2));
-            menuRectangle = new Rectangle(menuPos.X, menuPos.Y - 40, menuTexture.Width, menuTexture.Height);
+            menuRectangle = new Rectangle(menuPos.X, menuPos.Y, menuTexture.Width, menuTexture.Height);
             _menuForm = new Form("menuForm", "", menuRectangle, menuTexture, Fonts.Standard, Color.Black);
             _menuForm.Position = new Vector2(-menuRectangle.Width, _menuForm.Position.Y);
 
-            Texture2D buttonTexture = content.Load<Texture2D>("Textures/UI/button");
+            Texture2D buttonTexture = Sprites.Get("main_menu_button");
             Point buttonSize = new Point(240, 40);
             Point buttonPos = new Point(40, 40);
-            SpriteFont buttonFont = Fonts.Get("Menu");
-            
+            SpriteFont buttonFont = Fonts.Standard;
+
             // NEW GAME BUTTON
             Button _newGame = new Button("new_game", "New Game",
                 new Rectangle(40, 90, buttonSize.X, buttonSize.Y),
                 buttonTexture, buttonFont, Color.Black);
 
             _newGame.onClick += new EHandler(NewGame_Click);
-            _newGame.onMouseEnter += delegate{ Audio.PlaySoundEffect("high_beep"); };
+            _newGame.onMouseEnter += delegate { Audio.PlaySoundEffect("high_beep"); };
             _menuForm.AddControl(_newGame);
 
             // LOAD GAME BUTTON
@@ -81,8 +83,8 @@ namespace Mars
             _menuForm.AddControl(_exit);
 
             // SOUND BUTTON
-            soundTexture = content.Load<Texture2D>("Textures/UI/Buttons/sfx_toggle");
-            soundTexture_off = content.Load<Texture2D>("Textures/UI/Buttons/sfx_toggle_off");
+            soundTexture = Sprites.Get("sfx_toggle");
+            soundTexture_off = Sprites.Get("sfx_toggle_off");
             _sfx_toggle = new Button("soundToggle", "",
                 new Rectangle(2, 2, 20, 20),
                 soundTexture, buttonFont, Color.Black);
@@ -90,8 +92,8 @@ namespace Mars
             _sfx_toggle.onClick += new EHandler(ToggleEffects_Click);
 
             // MUSIC BUTTON
-            musicTexture = content.Load<Texture2D>("Textures/UI/Buttons/music_toggle");
-            musicTexture_off = content.Load<Texture2D>("Textures/UI/Buttons/music_toggle_off");
+            musicTexture = Sprites.Get("music_toggle");
+            musicTexture_off = Sprites.Get("music_toggle_off");
             _music_toggle = new Button("musicToggle", "",
                 new Rectangle(25, 2, 20, 20),
                 musicTexture, buttonFont, Color.Black);
@@ -105,8 +107,12 @@ namespace Mars
             _menuForm.AddControl(_labelVersion);
 
             // COPYRIGHT
-            float stringSize = Fonts.Get("Quote").MeasureString(Constants.GAME_COPYRIGHT).X;
-            _quote = new Label("copyright", Constants.GAME_COPYRIGHT, new Vector2((screen.Width / 2) - (stringSize / 2), screen.Height - 20), Fonts.Get("Quote"), Color.White * 0.5f, Constants.GAME_COPYRIGHT.Length, 0);
+            string copyright = Localization.Get("Copyright");
+            SpriteFont font = Fonts.Get("Tiny");
+            Vector2 stringSize = font.MeasureString(copyright);
+            _copyright = new Label("copyright", copyright,
+                new Vector2((screen.Width / 2) - (stringSize.X / 2), screen.Height - stringSize.Y),
+                font, Color.White * 0.5f, copyright.Length, 0);
 
             // MAIN MENU MUSIC
             Audio.Repeat = true;
@@ -120,15 +126,13 @@ namespace Mars
 
             _menuForm.Position = new Vector2(
                 (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Width / 2) - (_menuForm.Width / 2),
-                (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height / 2) - (_menuForm.Height / 2) - 40);
+                (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height / 2) - (_menuForm.Height / 2));
 
-
-            float stringSize = Fonts.Get("Quote").MeasureString(Constants.GAME_COPYRIGHT).X;
-            _quote.Position = new Vector2(
+            string copyright = Localization.Get("Copyright");
+            float stringSize = Fonts.Get("Tiny").MeasureString(copyright).X;
+            _copyright.Position = new Vector2(
                 (GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Width / 2) - (stringSize / 2),
                 GameStateManager.ENGINE.GraphicsDevice.Viewport.Bounds.Height - 20);
-
-            _quote.Text = Audio.SongPosition;
 
             if (showMenu)
             {
@@ -147,7 +151,7 @@ namespace Mars
             {
                 fadeIn = MathHelper.Lerp(fadeIn, 1.0f, 0.005f);
 
-                if (fadeIn > 0.95f)
+                if (fadeIn > 0.99f)
                 {
                     fadeIn = 1.0f;
                 }
@@ -161,7 +165,7 @@ namespace Mars
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            
+
             _background.DrawWithFade(spriteBatch, fadeIn);
 
             if (showMenu)
@@ -169,7 +173,7 @@ namespace Mars
                 _menuForm.Draw(spriteBatch);
                 _sfx_toggle.Draw(spriteBatch);
                 _music_toggle.Draw(spriteBatch);
-                _quote.Draw(spriteBatch);
+                _copyright.Draw(spriteBatch);
             }
             spriteBatch.End();
         }
@@ -178,7 +182,6 @@ namespace Mars
         {
             Audio.PlaySoundEffect("high_double_beep");
             GameStateManager.State = GameState.GameWorld;
-            GameStateManager.Mode = GameMode.World;
         }
 
         private void LoadGame_Click(GUIControl sender)
@@ -228,6 +231,19 @@ namespace Mars
         private void Exit_Click(GUIControl sender)
         {
             GameStateManager.State = GameState.Exit;
+        }
+
+        private Vector2 CenterScreen(GUIControl ctrl)
+        {
+            float x = (_screen.Width / 2) - (ctrl.Width / 2);
+            float y = (_screen.Height / 2) - (ctrl.Height / 2);
+            return new Vector2(x, y);
+        }
+        private Rectangle CenterScreen(GUIControl ctrl, bool ignore = true)
+        {
+            float x = (_screen.Width / 2) - (ctrl.Width / 2);
+            float y = (_screen.Height / 2) - (ctrl.Height / 2);
+            return new Rectangle((int)x, (int)y, ctrl.Width, ctrl.Height);
         }
     }
 }
