@@ -1,10 +1,10 @@
 # ID, Filepath
-tile,Textures/tile
-tile_wall,Textures/tile
-main_menu_background,Textures/UI/main_menu_background
-main_menu,Textures/UI/main_menu
-main_menu_button,Textures/UI/main_menu_button
-music_toggle,Textures/UI/Buttons/music_toggle
-music_toggle_off,Textures/UI/Buttons/music_toggle_off
-sfx_toggle,Textures/UI/Buttons/sfx_toggle
-sfx_toggle_off,Textures/UI/Buttons/sfx_toggle_off
+sprite,tile,Textures/tile
+sprite,tile_wall,Textures/tile
+sprite,main_menu_background,Textures/UI/main_menu_background
+sprite,main_menu,Textures/UI/main_menu
+sprite,main_menu_button,Textures/UI/main_menu_button
+sprite,music_toggle,Textures/UI/Buttons/music_toggle
+sprite,music_toggle_off,Textures/UI/Buttons/music_toggle_off
+sprite,sfx_toggle,Textures/UI/Buttons/sfx_toggle
+sprite,sfx_toggle_off,Textures/UI/Buttons/sfx_toggle_off

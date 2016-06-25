@@ -19,6 +19,7 @@ namespace Mars
         private GameUI _UI;
         private TileMap _tileMap;
         private Clock _clock;
+        private Selected _selected;
         private List<CrewMember> _crewMembers;
         private List<GameObject> _objects;
         private List<Building> _buildings;
@@ -29,6 +30,7 @@ namespace Mars
             _UI = new GameUI("World");
             _tileMap = new TileMap(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
             _clock = new Clock();
+            _selected = new Selected();
             _crewMembers = new List<CrewMember>();
             _objects = new List<GameObject>();
             _buildings = new List<Building>();
@@ -39,7 +41,7 @@ namespace Mars
         {
             Camera.Update(gameTime);
             _clock.Update(gameTime);
-            EntityCollider.Collide(gameTime);
+            _selected.Update(gameTime);
             _tileMap.Update(gameTime);
 
             // Update all Crew Members
@@ -100,6 +102,12 @@ namespace Mars
             set { _clock = value; }
         }
 
+        public Selected Selected
+        {
+            get { return _selected; }
+            set { _selected = value; }
+        }
+
         public List<CrewMember> CrewMembers
         {
             get { return _crewMembers; }
@@ -125,5 +133,31 @@ namespace Mars
             set { _planet = value; }
         }
         #endregion
+    }
+
+    public class Selected
+    {
+        private int _crewMember;
+
+        public Selected()
+        {
+        }
+
+        public void Update(GameTime gameTime)
+        {
+
+        }
+
+        public int CrewMember
+        {
+            get
+            {
+                return _crewMember;
+            }
+            set
+            {
+                _crewMember = value;
+            }
+        }
     }
 }

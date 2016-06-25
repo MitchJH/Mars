@@ -34,9 +34,9 @@ namespace Mars
         /// <summary>
         /// Load the localization file of the selected language
         /// </summary>
-        public static void LoadLocalization()
+        public static void Load()
         {
-            using (var reader = new StreamReader(TitleContainer.OpenStream("Content/Data/Localization/" + _language.ToString() + ".txt"), Encoding.Default, true))
+            using (var reader = new StreamReader(TitleContainer.OpenStream("Content/Localization/" + _language.ToString() + ".txt"), Encoding.Default, true))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -85,7 +85,7 @@ namespace Mars
                 {
                     // Only load the loc if it's a different language being requested compared to the current
                     _language = value;
-                    LoadLocalization();
+                    Load();
                 }
             }
         }

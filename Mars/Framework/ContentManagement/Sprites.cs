@@ -40,25 +40,13 @@ namespace Mars
             */
         }
 
-        public static void LoadSprites(string file, ContentManager content)
+        public static void LoadSprite(string[] data, ContentManager content)
         {
-            using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    line = line.ToLower();
-                    if (line.StartsWith("#") == false && string.IsNullOrEmpty(line) == false)
-                    {
-                        string[] split = line.Split(',');
-                        string id = split[0];
-                        string filepath = split[1];
+            string id = data[1];
+            string filepath = data[2];
 
-                        Texture2D newTexture = content.Load<Texture2D>(filepath);
-                        _sprites.Add(id, newTexture);
-                    }
-                }
-            }
+            Texture2D newTexture = content.Load<Texture2D>(filepath);
+            _sprites.Add(id, newTexture);
         }
 
         public static Texture2D Get(string key)

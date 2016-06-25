@@ -18,25 +18,13 @@ namespace Mars
             _fonts = new Dictionary<string, SpriteFont>();
         }
 
-        public static void LoadFonts(string file, ContentManager content)
+        public static void LoadFont(string[] data, ContentManager content)
         {
-            using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    line = line.ToLower();
-                    if (line.StartsWith("#") == false)
-                    {
-                        string[] split = line.Split(',');
-                        string id = split[0];
-                        string filepath = split[1];
+            string id = data[1];
+            string filepath = data[2];
 
-                        SpriteFont newFont = content.Load<SpriteFont>(filepath);
-                        _fonts.Add(id, newFont);
-                    }
-                }
-            }
+            SpriteFont newFont = content.Load<SpriteFont>(filepath);
+            _fonts.Add(id, newFont);
         }
 
         public static SpriteFont Get(string key)

@@ -1,4 +1,4 @@
 # ID, Filepath
-Standard,Fonts/Standard
-Tiny,Fonts/Tiny
-Console,Fonts/Console
+font,Standard,Fonts/Standard
+font,Tiny,Fonts/Tiny
+font,Console,Fonts/Console

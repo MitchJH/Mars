@@ -28,6 +28,10 @@ namespace Mars
         /// <summary>Height of the map in tiles.</summary>
         public const int MAP_HEIGHT = 40;
 
+        // PATHFINDING
+        /// <summary>The distance between the crew and destination before they are considered as arrived.</summary>
+        public const float WAYPOINT_RADIUS = 32.0f;
+
         // CAMERA
         // Zoom
         /// <summary>Speed of the camera when zooming in.</summary>

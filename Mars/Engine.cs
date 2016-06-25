@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -75,22 +76,10 @@ namespace Mars
             Sprites.PIXEL = Content.Load<Texture2D>("Textures/pixel");
 
             // Load the localization file
-            Localization.LoadLocalization();
+            Localization.Load();
 
-            // Load all fonts
-            Fonts.LoadFonts("Content/Data/fonts.txt", Content);
-
-            // Load all game sprites
-            Sprites.LoadSprites("Content/Data/sprites.txt", Content);
-
-            // Load all sound effects
-            Audio.LoadSounds("Content/Data/sounds.txt", Content);
-
-            // Load all object types
-            ObjectManager.LoadObjects("Content/Data/objects.txt", Content);
-
-            // Load all building types
-            BuildingManager.LoadBuildings("Content/Data/buildings.txt", Content);
+            // Load all game data
+            DataLoader.Load("Data", Content);
 
             // Enable the FPS counter
             FrameRateCounter.Enable();

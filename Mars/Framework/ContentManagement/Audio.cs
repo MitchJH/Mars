@@ -24,34 +24,22 @@ namespace Mars
             _music = new Dictionary<string, Song>();
         }
 
-        public static void LoadSounds(string file, ContentManager content)
+        public static void LoadSound(string[] data, ContentManager content)
         {
-            using (var reader = new StreamReader(TitleContainer.OpenStream(file)))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    line = line.ToLower();
-                    if (line.StartsWith("#") == false && string.IsNullOrEmpty(line) == false)
-                    {
-                        string[] split = line.Split(',');
-                        string id = split[0];
-                        string filepath = split[1];
-                        string audioType = split[2];
+            string id = data[1];
+            string filepath = data[2];
 
-                        if (audioType == "effect")
-                        {
-                            SoundEffect newSound = content.Load<SoundEffect>(filepath);
-                            _sounds.Add(id, newSound);
-                        }
-                        else if (audioType == "music")
-                        {
-                            Song newSong = content.Load<Song>(filepath);
-                            _music.Add(id, newSong);
-                        }
-                    }
-                }
-            }
+            SoundEffect newSound = content.Load<SoundEffect>(filepath);
+            _sounds.Add(id, newSound);
+        }
+
+        public static void LoadMusic(string[] data, ContentManager content)
+        {
+            string id = data[1];
+            string filepath = data[2];
+
+            Song newSong = content.Load<Song>(filepath);
+            _music.Add(id, newSong);
         }
 
         /// <summary>

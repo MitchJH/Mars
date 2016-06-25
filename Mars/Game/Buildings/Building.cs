@@ -10,22 +10,22 @@ namespace Mars
 {
     public class Building : Entity
     {
-        private string _key; // The unique identifier of this object
-        private BuildingType _buildingType; // What type of object this is
+        private int _ID;
+        private BuildingType _buildingType;
 
-        public Building(string key, string buildingType, Vector2 tilePosition)
+        public Building(int ID, string buildingType, Vector2 tilePosition)
             : base()
         {
-            _key = key;
+            _ID = ID;
             _buildingType = BuildingManager.GetType(buildingType);
-            base.TilePosition = tilePosition; // Set the tile position of the entity
             base.Position = new Vector2(tilePosition.X * Constants.TILE_WIDTH, tilePosition.Y * Constants.TILE_WIDTH);
         }
 
-        public string Key
+        #region PROPERTIES
+        public int ID
         {
-            get { return _key; }
-            set { _key = value; }
+            get { return _ID; }
+            set { _ID = value; }
         }
 
         public BuildingType BuildingType
@@ -33,5 +33,6 @@ namespace Mars
             get { return _buildingType; }
             set { _buildingType = value; }
         }
+        #endregion
     }
 }

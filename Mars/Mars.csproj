@@ -59,6 +59,7 @@
     <Compile Include="Framework\Camera.cs" />
     <Compile Include="Framework\Clock.cs" />
     <Compile Include="Framework\Constants.cs" />
+    <Compile Include="Framework\ContentManagement\DataLoader.cs" />
     <Compile Include="Framework\Controls.cs" />
     <Compile Include="Framework\DebugConsole.cs" />
     <Compile Include="Framework\ContentManagement\Fonts.cs" />
@@ -88,9 +89,10 @@
     <Compile Include="Framework\ContentManagement\Sprites.cs" />
     <Compile Include="Framework\Managers\InterfaceManager.cs" />
     <Compile Include="Framework\Version.cs" />
+    <Compile Include="Game\Crew\Country.cs" />
     <Compile Include="Game\Crew\CrewMember.cs" />
+    <Compile Include="Game\Crew\Trait.cs" />
     <Compile Include="Game\Entity.cs" />
-    <Compile Include="Game\EntityCollider.cs" />
     <Compile Include="Game\Objects\GameObject.cs" />
     <Compile Include="Game\Objects\ObjectManager.cs" />
     <Compile Include="Game\Objects\ObjectTypes.cs" />
@@ -129,9 +131,9 @@
     <Content Include="Content\Audio\Music\background.mp3" />
     <Content Include="Content\Audio\Music\main_menu.mp3" />
     <Content Include="Content\Data\fonts.txt" />
-    <Content Include="Content\Data\Localization\English.txt" />
     <Content Include="Content\Data\sounds.txt" />
     <Content Include="Content\Data\sprites.txt" />
+    <Content Include="Content\Localization\English.txt" />
     <Content Include="Content\Textures\missing.png" />
     <Content Include="Content\Textures\pixel.png" />
     <Content Include="Content\Textures\tile.png" />

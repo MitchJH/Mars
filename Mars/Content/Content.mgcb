@@ -55,9 +55,6 @@
 /processorParam:Quality=Best
 /build:Audio/missing.wav
 
-#begin Data/Localization/English.txt
-/copy:Data/Localization/English.txt
-
 #begin Fonts/Standard.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -222,4 +219,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/tile.png
+
+#begin Localization/English.txt
+/copy:Localization/English.txt
 
