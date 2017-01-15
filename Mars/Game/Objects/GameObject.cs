@@ -17,12 +17,11 @@ namespace Mars
         private float _oxygenRequirement;
         private float _waterRequirement;
 
-        public GameObject(int ID, string objectType, Vector2 tilePosition)
-            : base()
+        public GameObject(int ID, string objectType, Vector2 tilePosition, Vector2 size)
+            : base(new Vector2(tilePosition.X * Constants.TILE_WIDTH, tilePosition.Y * Constants.TILE_WIDTH), size)
         {
             _ID = ID;
             _objectType = ObjectManager.GetType(objectType);
-            base.Position = new Vector2(tilePosition.X * Constants.TILE_WIDTH, tilePosition.Y * Constants.TILE_WIDTH);
         }
 
         public override void Update(GameTime gameTime)

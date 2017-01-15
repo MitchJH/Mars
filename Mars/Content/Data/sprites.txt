@@ -8,3 +8,4 @@ sprite,music_toggle,Textures/UI/Buttons/music_toggle
 sprite,music_toggle_off,Textures/UI/Buttons/music_toggle_off
 sprite,sfx_toggle,Textures/UI/Buttons/sfx_toggle
 sprite,sfx_toggle_off,Textures/UI/Buttons/sfx_toggle_off
+sprite,crew,Textures/crew

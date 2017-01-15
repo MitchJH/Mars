@@ -10,16 +10,16 @@ namespace Mars
 {
     public static class Settings
     {
-        private static string appDataPath;
+        private static string _appDataPath;
         // General Settings
         private static WindowMode _windowMode;
         private static GameState _startingGameState;
-        private static int _X_resolution;
-        private static int _Y_resolution;
+        private static int _resolutionX;
+        private static int _resolutionY;
         private static int _window_width;
         private static int _window_height;
-        private static int _X_windowPos;
-        private static int _Y_windowPos;
+        private static int _windowPosX;
+        private static int _windowPosY;
         private static bool _mouseVisible;
         private static bool _fixedTimestep;
         private static bool _mouseScrolling;
@@ -36,15 +36,15 @@ namespace Mars
         {
             int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.APP_DATA_GAME_NAME);
+            _appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.APP_DATA_GAME_NAME);
 
             // General
             _windowMode = WindowMode.Fullscreen;
             _startingGameState = GameState.MainMenu;
-            _X_resolution = screenWidth;
-            _Y_resolution = screenHeight;
-            _X_windowPos = 0;
-            _Y_windowPos = 0;
+            _resolutionX = screenWidth;
+            _resolutionY = screenHeight;
+            _windowPosX = 0;
+            _windowPosY = 0;
             _mouseVisible = true;
             _fixedTimestep = false;
             _mouseScrolling = true;
@@ -77,11 +77,11 @@ namespace Mars
                     }
                     else if (setting.StartsWith("x_res"))
                     {
-                        _X_resolution = int.Parse(value);
+                        _resolutionX = int.Parse(value);
                     }
                     else if (setting.StartsWith("y_res"))
                     {
-                        _Y_resolution = int.Parse(value);
+                        _resolutionY = int.Parse(value);
                     }
                     else if (setting.StartsWith("window_width"))
                     {
@@ -93,11 +93,11 @@ namespace Mars
                     }
                     else if (setting.StartsWith("x_pos"))
                     {
-                        _X_windowPos = int.Parse(value);
+                        _windowPosX = int.Parse(value);
                     }
                     else if (setting.StartsWith("y_pos"))
                     {
-                        _Y_windowPos = int.Parse(value);
+                        _windowPosY = int.Parse(value);
                     }
                     else if (setting.StartsWith("mouse_visible"))
                     {
@@ -141,9 +141,9 @@ namespace Mars
 
         public static void LoadFromFile()
         {
-            if (Directory.Exists(AppDataPath))
+            if (Directory.Exists(_appDataPath))
             {
-                string file = Path.Combine(AppDataPath, @"Settings.txt");
+                string file = Path.Combine(_appDataPath, @"Settings.txt");
 
                 if (File.Exists(file))
                 {
@@ -153,7 +153,7 @@ namespace Mars
             }
             else
             {
-                Directory.CreateDirectory(AppDataPath);
+                Directory.CreateDirectory(_appDataPath);
             }
         }
 
@@ -164,12 +164,12 @@ namespace Mars
             sb.AppendLine("# GENERAL SETTINGS");
             sb.AppendLine("window_mode " + _windowMode.ToString() + GetEnumListString(_windowMode));
             sb.AppendLine("starting_game_state " + _startingGameState.ToString() + GetEnumListString(_startingGameState));
-            sb.AppendLine("x_res " + _X_resolution.ToString());
-            sb.AppendLine("y_res " + _Y_resolution.ToString());
+            sb.AppendLine("x_res " + _resolutionX.ToString());
+            sb.AppendLine("y_res " + _resolutionY.ToString());
             sb.AppendLine("window_width " + _window_width.ToString());
             sb.AppendLine("window_height " + _window_height.ToString());
-            sb.AppendLine("x_pos " + _X_windowPos.ToString());
-            sb.AppendLine("y_pos " + _Y_windowPos.ToString());
+            sb.AppendLine("x_pos " + _windowPosX.ToString());
+            sb.AppendLine("y_pos " + _windowPosY.ToString());
             sb.AppendLine("mouse_visible " + _mouseVisible.ToString());
             sb.AppendLine("fixed_timestep " + _fixedTimestep.ToString());
             sb.AppendLine("mouse_scrolling " + _mouseScrolling.ToString());
@@ -184,12 +184,12 @@ namespace Mars
             sb.AppendLine("# DEBUG SETTINGS");
             sb.AppendLine("debug_mode " + _debugOn.ToString());
 
-            if (Directory.Exists(AppDataPath) == false)
+            if (Directory.Exists(_appDataPath) == false)
             {
-                Directory.CreateDirectory(AppDataPath);
+                Directory.CreateDirectory(_appDataPath);
             }
 
-            string file = Path.Combine(AppDataPath, @"Settings.txt");
+            string file = Path.Combine(_appDataPath, @"Settings.txt");
 
             if (File.Exists(file))
             {
@@ -226,6 +226,7 @@ namespace Mars
             return enumList;
         }
 
+        #region PROPERTIES
         public static WindowMode WindowMode
         {
             get { return Settings._windowMode; }
@@ -238,16 +239,16 @@ namespace Mars
             set { Settings._startingGameState = value; }
         }
 
-        public static int X_resolution
+        public static int ResolutionX
         {
-            get { return Settings._X_resolution; }
-            set { Settings._X_resolution = value; }
+            get { return Settings._resolutionX; }
+            set { Settings._resolutionX = value; }
         }
 
-        public static int Y_resolution
+        public static int ResolutionY
         {
-            get { return Settings._Y_resolution; }
-            set { Settings._Y_resolution = value; }
+            get { return Settings._resolutionY; }
+            set { Settings._resolutionY = value; }
         }
 
         public static int Window_Width
@@ -262,16 +263,16 @@ namespace Mars
             set { Settings._window_height = value; }
         }
 
-        public static int X_windowPos
+        public static int WindowPosX
         {
-            get { return Settings._X_windowPos; }
-            set { Settings._X_windowPos = value; }
+            get { return Settings._windowPosX; }
+            set { Settings._windowPosX = value; }
         }
 
-        public static int Y_windowPos
+        public static int WindowPosY
         {
-            get { return Settings._Y_windowPos; }
-            set { Settings._Y_windowPos = value; }
+            get { return Settings._windowPosY; }
+            set { Settings._windowPosY = value; }
         }
 
         public static bool IsMouseVisible
@@ -330,7 +331,52 @@ namespace Mars
 
         public static string AppDataPath
         {
-            get { return appDataPath; }
+            get { return _appDataPath; }
+        }
+        #endregion
+    }
+
+    public static class Tweaker
+    {
+        private static List<string> _tweakers = new List<string>();
+
+        static Tweaker()
+        {
+            Load();
+        }
+
+        public static bool Exists(string tweaker)
+        {
+            return _tweakers.Contains(tweaker);
+        }
+
+        private static void Load()
+        {            
+            if (Directory.Exists(Settings.AppDataPath))
+            {
+                string file = Path.Combine(Settings.AppDataPath, @"Tweakers.txt");
+
+                if (File.Exists(file))
+                {
+                    string[] lines = File.ReadAllLines(file);
+
+                    foreach (string line in lines)
+                    {
+                        _tweakers.Add(line);
+                    }
+                }
+            }
+        }
+
+        public static void Add(string tweaker)
+        {
+            _tweakers.Add(tweaker);
+        }
+
+        public static void Remove(string tweaker)
+        {
+            // The lambda expression is the predicate required
+            _tweakers.RemoveAll(item => item == tweaker);
         }
     }
 

@@ -13,12 +13,11 @@ namespace Mars
         private int _ID;
         private BuildingType _buildingType;
 
-        public Building(int ID, string buildingType, Vector2 tilePosition)
-            : base()
+        public Building(int ID, string buildingType, Vector2 tilePosition, Vector2 size)
+            : base(new Vector2(tilePosition.X * Constants.TILE_WIDTH, tilePosition.Y * Constants.TILE_WIDTH), size)
         {
             _ID = ID;
             _buildingType = BuildingManager.GetType(buildingType);
-            base.Position = new Vector2(tilePosition.X * Constants.TILE_WIDTH, tilePosition.Y * Constants.TILE_WIDTH);
         }
 
         #region PROPERTIES

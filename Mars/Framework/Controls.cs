@@ -17,11 +17,13 @@ namespace Mars
         private static KeyboardState _oldKeyboardState;
 
         private static Vector2 _mouseWorldPosition;
+        private static Point _mouseWorldTilePosition;
         private static Vector2 _mouseScreenPosition;
 
         static Controls()
         {
             _mouseWorldPosition = Vector2.Zero;
+            _mouseWorldTilePosition = Point.Zero;
             _mouseScreenPosition = Vector2.Zero;
         }
 
@@ -33,8 +35,15 @@ namespace Mars
             _currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             _currentKeyboardState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
 
-            _mouseScreenPosition = new Vector2(_currentMouseState.X, _currentMouseState.Y);
-            _mouseWorldPosition = Vector2.Transform(_mouseScreenPosition, Camera.InverseTransform);
+            if (_currentMouseState.IsInCameraView())
+            {
+                _mouseScreenPosition = new Vector2(_currentMouseState.X, _currentMouseState.Y);
+                _mouseWorldPosition = Vector2.Transform(_mouseScreenPosition, Camera.InverseTransform);
+                
+                _mouseWorldTilePosition = new Point(
+                    (int)Math.Floor(_mouseWorldPosition.X / Constants.TILE_WIDTH),
+                    (int)Math.Floor(_mouseWorldPosition.Y / Constants.TILE_HEIGHT));
+            }
         }
 
         public static MouseState Mouse
@@ -78,6 +87,15 @@ namespace Mars
             get
             {
                 return _mouseWorldPosition;
+            }
+        }
+
+        /// <summary>Returns the game tile the mouse is currently over.</summary>
+        public static Point MouseWorldTilePosition
+        {
+            get
+            {
+                return _mouseWorldTilePosition;
             }
         }
 

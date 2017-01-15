@@ -11,6 +11,7 @@ namespace Mars
     public class CrewMember : Entity
     {
         private int _ID;
+        private string _sprite;
         private Bio _bio;
         private Needs _needs;
         private Skills _skills;
@@ -18,10 +19,16 @@ namespace Mars
 
         private LinkedList<Tile> _path;
         private bool _selected;
+        private bool _hovered;
 
-        public CrewMember(int ID, string name, int age, bool male, Country country, string story, Vector2? position = null) : base(position)
+        private Vector2 _velocity;
+        private Vector2 _direction;
+
+        public CrewMember(int ID, string name, int age, bool male, Country country, string story, Vector2 position)
+            : base(position, new Vector2(Constants.CREW_MEMBER_WIDTH, Constants.CREW_MEMBER_HEIGHT))
         {
             _ID = ID;
+            _sprite = "crew";
 
             _bio.Name = name;
             _bio.Age = age;
@@ -44,16 +51,91 @@ namespace Mars
 
             _path = new LinkedList<Tile>();
             _selected = false;
+            _hovered = false;
         }
 
         public override void Update(GameTime gameTime)
         {
+            _hovered = this.Bounds.Contains(Controls.MouseWorldPosition.ToPoint());
+
+            this.Move(gameTime);
+
             base.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spritebatch)
         {
+            if (_selected)
+            {
+                if (_path.Count > 0)
+                {
+                    DrawPath(spritebatch);
+                }
 
+                spritebatch.Draw(Sprites.Get(_sprite), this.Bounds, Color.Green);
+            }
+            else
+            {
+                if (_hovered)
+                {
+                    spritebatch.Draw(Sprites.Get(_sprite), this.Bounds, Color.Yellow);
+                }
+                else
+                {
+                    spritebatch.Draw(Sprites.Get(_sprite), this.Bounds, Color.White);
+                }
+            }
+        }
+
+        private void DrawPath(SpriteBatch spritebatch)
+        {
+            for (int i = 0; i < _path.Count; i++)
+            {
+                Tile pathTile = _path.ElementAt(i);
+
+                int halfTileWidth = Constants.TILE_WIDTH / 2;
+                int halfTileHeight = Constants.TILE_HEIGHT / 2;
+
+                int tileX = pathTile.Bounds.Center.X - (halfTileWidth / 2);
+                int tileY = pathTile.Bounds.Center.Y - (halfTileHeight / 2);
+
+                if (i + 1 < _path.Count)
+                {
+                    spritebatch.DrawLine(_path.ElementAt(i).Bounds.Center.ToVector2(), _path.ElementAt(i + 1).Bounds.Center.ToVector2(), Color.Green);
+                }
+
+                if (i == 0)
+                {
+                    spritebatch.DrawLine(this.Center, _path.ElementAt(0).Bounds.Center.ToVector2(), Color.Green);
+                    spritebatch.FillRectangle(new Vector2(tileX, tileY), new Vector2(halfTileWidth, halfTileHeight), Color.Red);
+                }
+                else if (i == _path.Count - 1)
+                {
+                    spritebatch.FillRectangle(new Vector2(tileX, tileY), new Vector2(halfTileWidth, halfTileHeight), Color.Green);
+                }
+                else
+                {
+                    spritebatch.DrawCircle(_path.ElementAt(i).Bounds.Center.ToVector2(), 3, 36, Color.Green, 5);
+                }
+            }
+        }
+
+        private void Move(GameTime gameTime)
+        {
+            if (_path.Count > 0)
+            {
+                Tile nextTile = _path.First.Value;
+                _direction = Vector2.Normalize(nextTile.Center - this.Center);
+
+                _direction.Normalize();
+
+                this.Position += _direction * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                
+                if (Vector2.Distance(this.Center, nextTile.Center) < Constants.WAYPOINT_RADIUS)
+                {
+                    _path.RemoveFirst();
+                }
+            }
         }
 
         #region PROPERTIES
@@ -61,6 +143,18 @@ namespace Mars
         {
             get { return _ID; }
             set { _ID = value; }
+        }
+
+        public string Sprite
+        {
+            get { return _sprite; }
+            set { _sprite = value; }
+        }
+
+        public Bio Bio
+        {
+            get { return _bio; }
+            set { _bio = value; }
         }
 
         public Needs Needs
@@ -91,6 +185,12 @@ namespace Mars
         {
             get { return _selected; }
             set { _selected = value; }
+        }
+
+        public bool Hovered
+        {
+            get { return _hovered; }
+            set { _hovered = value; }
         }
         #endregion
     }

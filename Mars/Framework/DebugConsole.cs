@@ -28,8 +28,10 @@ namespace Mars
 
         private static void CheckCommand(GUIControl sender)
         {
-            string command = sender.Text.ToLower();
-            _last = command;
+            string wholeCommand = sender.Text.ToLower();
+            string[] commandList = wholeCommand.Split(' ');
+            string command = commandList[0];
+            _last = wholeCommand;
             sender.Text = "";
             bool actualCommand = true;
 
@@ -72,8 +74,8 @@ namespace Mars
 
                 if (GameStateManager.ENGINE.GRAPHICS.IsFullScreen == true)
                 {
-                    GameStateManager.ENGINE.GRAPHICS.PreferredBackBufferWidth = Settings.X_resolution;
-                    GameStateManager.ENGINE.GRAPHICS.PreferredBackBufferHeight = Settings.Y_resolution;
+                    GameStateManager.ENGINE.GRAPHICS.PreferredBackBufferWidth = Settings.ResolutionX;
+                    GameStateManager.ENGINE.GRAPHICS.PreferredBackBufferHeight = Settings.ResolutionY;
                     GameStateManager.ENGINE.GRAPHICS.ApplyChanges();
                     GameStateManager.ENGINE.GRAPHICS.ToggleFullScreen();
                 }
@@ -93,6 +95,24 @@ namespace Mars
                 DebugTextManager.Enabled = !DebugTextManager.Enabled;
                 Settings.DebugOn = DebugTextManager.Enabled;
             }
+            else if (command == "tweaker")
+            {
+                if (string.IsNullOrEmpty(commandList[1]) == false)
+                {
+                    if (Tweaker.Exists(commandList[1]))
+                    {
+                        Tweaker.Remove(commandList[1]);
+                    }
+                    else
+                    {
+                        Tweaker.Add(commandList[1]);
+                    }
+                }
+                else
+                {
+                    actualCommand = false;
+                }
+            }
             else if (command == "save")
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(World));
@@ -104,6 +124,20 @@ namespace Mars
                     serializer.WriteObject(xml, GameStateManager.ENGINE.WORLD);
                 }
             }
+            else if (command == "kill")
+            {
+                if (GameStateManager.ENGINE.WORLD.SelectedCrewMember != null)
+                {
+                    GameStateManager.ENGINE.WORLD.CrewMembers.Remove(GameStateManager.ENGINE.WORLD.SelectedCrewMember);
+                }
+            }
+            else if (command == "move_to")
+            {
+                if (GameStateManager.ENGINE.WORLD.SelectedCrewMember != null)
+                {
+                    GameStateManager.ENGINE.WORLD.SelectedCrewMember.Path = Pathfinding.FindPath(GameStateManager.ENGINE.WORLD.SelectedCrewMember.TilePosition, Controls.MouseWorldTilePosition);
+                }
+            }
             else
             {
                 actualCommand = false;
@@ -111,7 +145,7 @@ namespace Mars
 
             if (actualCommand)
             {
-                _enabled = !Enabled;
+                _enabled = !_enabled;
                 consoleTextBox.Focus = Enabled;
                 Audio.PlaySoundEffect("high_double_beep");
             }
@@ -133,11 +167,11 @@ namespace Mars
         {
             if (Controls.KeyboardOld.IsKeyDown(Constants.CONSOLE_KEY) && Controls.Keyboard.IsKeyUp(Constants.CONSOLE_KEY))
             {
-                _enabled = !Enabled;
-                consoleTextBox.Focus = Enabled;
+                _enabled = !_enabled;
+                consoleTextBox.Focus = _enabled;
             }
 
-            if (Enabled)
+            if (_enabled)
             {
                 consoleTextBox.Update();
             }
@@ -145,7 +179,7 @@ namespace Mars
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (Enabled)
+            if (_enabled)
             {
                 spriteBatch.Begin();
                 consoleTextBox.Draw(spriteBatch);
@@ -166,10 +200,7 @@ namespace Mars
 
         public static bool Enabled
         {
-            get
-            {
-                return _enabled;
-            }
+            get { return _enabled; }
         }
     }
 }

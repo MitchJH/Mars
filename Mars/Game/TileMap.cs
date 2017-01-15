@@ -12,6 +12,7 @@ namespace Mars
     public class TileMap
     {
         private Tile[,] _tiles;
+        private Tile _hoveredTile;
 
         public TileMap(int width, int height)
         {
@@ -20,48 +21,21 @@ namespace Mars
         }
 
         public void Update(GameTime gameTime)
-        {            
-            foreach (Tile t in _tiles)
+        {
+            if (_hoveredTile != null)
             {
-                t.Hovered = false;
+                _hoveredTile.Hovered = false;
             }
 
-            Point hoveredTileLocation = TileAtCoordinates(Controls.MouseWorldPosition);
-            Tile hoveredTile = TileAtPosition(hoveredTileLocation);
-
-            // Check we are within the TileMap
-            if (hoveredTile != null)
+            if (IsPositionInTilemap(Controls.MouseWorldTilePosition))
             {
-                hoveredTile.Hovered = true;
-
-                // Only apply the following logic in the World GameMode
-                if (GameStateManager.Mode == GameMode.World)
-                {
-                    if (Controls.Mouse.RightButton == ButtonState.Pressed)
-                    {
-                        hoveredTile.Type = TileType.Impassable;
-                    }
-                    else if (Controls.Mouse.LeftButton == ButtonState.Pressed)
-                    {
-                        hoveredTile.Type = TileType.Passable;
-                    }
-                }
-            }
-
-            if (GameStateManager.Mode == GameMode.Build)
-            {
-                BuildModeManager.Update(this, hoveredTileLocation);
-            }
-            else if (GameStateManager.Mode == GameMode.Pipe)
-            {
-                PipeModeManager.Update(ref _tiles, hoveredTileLocation);
+                _hoveredTile = _tiles[Controls.MouseWorldTilePosition.X, Controls.MouseWorldTilePosition.Y];
+                _hoveredTile.Hovered = true;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
-
             for (int x = 0; x < Constants.MAP_WIDTH; x++)
             {
                 for (int y = 0; y < Constants.MAP_HEIGHT; y++)
@@ -88,20 +62,23 @@ namespace Mars
                     {
                         if (tile.Hovered)
                         {
-                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.Green);
+                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.DarkGreen);
                         }
                         else
                         {
-                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.LightGray);
+                            spriteBatch.Draw(Sprites.Get("Tile_Wall"), tileRectangle, Color.Gray);
                         }
                     }
 
                     //spriteBatch.DrawRectangle(tileRectangle, Color.White * 0.5f);
-                    //spriteBatch.DrawString(Fonts.Standard, tileX + ":" + tileY, new Vector2(tileRectangle.X, tileRectangle.Y+(Constants.TILE_WIDTH/2)), Color.White * 0.7f);
+                    //spriteBatch.DrawString(Fonts.Get("tiny"), x + ":" + y, new Vector2(tileRectangle.X, tileRectangle.Y+(Constants.TILE_WIDTH/2)), Color.White * 0.7f);
                 }
             }
 
-            spriteBatch.End();
+            foreach (Line line in Pathfinding.DebugLines)
+            {
+                spriteBatch.DrawLine(line.Start, line.End, Color.Black);
+            }
         }
 
         public void ClearTiles()
@@ -155,6 +132,35 @@ namespace Mars
             return null;
         }
 
+        public List<Tile> TilesAroundPosition(Point position, int depth = 1, bool includeCenter = false)
+        {
+            List<Tile> tiles = new List<Tile>();
+
+            int minX = position.X - depth;
+            int maxX = position.X + depth;
+
+            int minY = position.Y - depth;
+            int maxY = position.Y + depth;
+
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    Point tilePos = new Point(x, y);
+                    Tile tile = TileAtPosition(tilePos);
+
+                    if (tile != null)
+                    {
+                        if (position != tilePos || includeCenter == true)
+                        {
+                            tiles.Add(tile);
+                        }
+                    }
+                }
+            }
+            return tiles;
+        }
+
         /// <summary>
         /// Return whether a given position is a valid location in the bounds of the Tile array
         /// </summary>
@@ -176,6 +182,11 @@ namespace Mars
         {
             get { return _tiles; }
             set { _tiles = value; }
+        }
+
+        public Tile HoveredTile
+        {
+            get { return _hoveredTile; }
         }
     }
 }

@@ -124,6 +124,16 @@ namespace Mars
         /// </summary>
         public LinkedList<TPathNode> Search(Point inStartNode, Point inEndNode, TUserContext inUserContext)
         {
+            if (inStartNode.X < 0 || inStartNode.Y < 0 || inStartNode.X >= Constants.MAP_WIDTH || inStartNode.Y >= Constants.MAP_HEIGHT)
+            {
+                return new LinkedList<TPathNode>();
+            }
+
+            if (inEndNode.X < 0 || inEndNode.Y < 0 || inEndNode.X >= Constants.MAP_WIDTH || inEndNode.Y >= Constants.MAP_HEIGHT)
+            {
+                return new LinkedList<TPathNode>();
+            }
+
             PathNode startNode = m_SearchSpace[inStartNode.X, inStartNode.Y];
             PathNode endNode = m_SearchSpace[inEndNode.X, inEndNode.Y];
 
@@ -158,7 +168,6 @@ namespace Mars
             m_RuntimeGrid.Add(startNode);
 
             int nodes = 0;
-
 
             while (!m_OpenSet.IsEmpty)
             {

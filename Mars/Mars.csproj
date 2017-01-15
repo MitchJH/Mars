@@ -58,7 +58,8 @@
     <Compile Include="Framework\ContentManagement\Audio.cs" />
     <Compile Include="Framework\Camera.cs" />
     <Compile Include="Framework\Clock.cs" />
-    <Compile Include="Framework\Constants.cs" />
+    <Compile Include="Framework\ErrorLogging.cs" />
+    <Compile Include="Game\Constants.cs" />
     <Compile Include="Framework\ContentManagement\DataLoader.cs" />
     <Compile Include="Framework\Controls.cs" />
     <Compile Include="Framework\DebugConsole.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Game\Objects\GameObject.cs" />
     <Compile Include="Game\Objects\ObjectManager.cs" />
     <Compile Include="Game\Objects\ObjectTypes.cs" />
+    <Compile Include="Framework\Pathfinding\Pathfinding.cs" />
     <Compile Include="Game\PipeManager.cs" />
     <Compile Include="Game\Planet.cs" />
     <Compile Include="Game\Buildings\Building.cs" />
@@ -134,6 +136,7 @@
     <Content Include="Content\Data\sounds.txt" />
     <Content Include="Content\Data\sprites.txt" />
     <Content Include="Content\Localization\English.txt" />
+    <Content Include="Content\Textures\crew.png" />
     <Content Include="Content\Textures\missing.png" />
     <Content Include="Content\Textures\pixel.png" />
     <Content Include="Content\Textures\tile.png" />

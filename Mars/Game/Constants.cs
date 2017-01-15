@@ -28,9 +28,17 @@ namespace Mars
         /// <summary>Height of the map in tiles.</summary>
         public const int MAP_HEIGHT = 40;
 
+        // CREW MEMBERS
+        /// <summary>The width of a crew member.</summary>
+        public const int CREW_MEMBER_WIDTH = 32;
+        /// <summary>The height of a crew member.</summary>
+        public const int CREW_MEMBER_HEIGHT = 32;
+
         // PATHFINDING
         /// <summary>The distance between the crew and destination before they are considered as arrived.</summary>
-        public const float WAYPOINT_RADIUS = 32.0f;
+        public const float WAYPOINT_RADIUS = 1;
+        /// <summary>If true excess nodes between a paths start and end point will be culled.</summary>
+        public const bool WAYPOINT_CULLING = false;
 
         // CAMERA
         // Zoom

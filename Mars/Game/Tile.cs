@@ -16,26 +16,31 @@ namespace Mars
 
     public class Tile : IPathNode<Object>
     {
-        private Point _index;
+        private Point _position;
         private Vector2 _center;
-        private Rectangle _position;
+        private Rectangle _bounds;
         private TileType _type;
         private bool _hovered;
         private Pipe _pipe;
 
         public Tile(int x, int y)
         {
-            _index = new Point(x, y);
+            _position = new Point(x, y);
             _hovered = false;
 
             float tile_pos_x = x * Constants.TILE_WIDTH;
-            float tile_pos_y = x * Constants.TILE_HEIGHT;
+            float tile_pos_y = y * Constants.TILE_HEIGHT;
 
-            _center = new Vector2(tile_pos_x + (Constants.TILE_WIDTH / 2), tile_pos_y + (Constants.TILE_WIDTH / 2));
+            _center = new Vector2(tile_pos_x + (Constants.TILE_WIDTH / 2), tile_pos_y + (Constants.TILE_HEIGHT / 2));
 
-            _position = new Rectangle((int)tile_pos_x, (int)tile_pos_y, Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
+            _bounds = new Rectangle((int)tile_pos_x, (int)tile_pos_y, Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
         }
-        
+
+        public void Update(GameTime gameTime)
+        {
+            _hovered = _bounds.Contains(Controls.Mouse.Position);
+        }
+
         public bool IsWalkable(Object unused)
         {
             if (_type == TileType.Passable)
@@ -46,10 +51,10 @@ namespace Mars
             return false;
         }
 
-        public Point Index
+        public Point Position
         {
-            get { return _index; }
-            set { _index = value; }
+            get { return _position; }
+            set { _position = value; }
         }
 
         public Vector2 Center
@@ -58,10 +63,10 @@ namespace Mars
             set { _center = value; }
         }
 
-        public Rectangle Position
+        public Rectangle Bounds
         {
-            get { return _position; }
-            set { _position = value; }
+            get { return _bounds; }
+            set { _bounds = value; }
         }
 
         public TileType Type
@@ -80,6 +85,36 @@ namespace Mars
         {
             get { return _pipe; }
             set { _pipe = value; }
+        }
+
+        // Corners
+        public Vector2 TopLeft
+        {
+            get
+            {
+                return new Vector2(_bounds.X + 1, _bounds.Y + 1);
+            }
+        }
+        public Vector2 TopRight
+        {
+            get
+            {
+                return new Vector2(_bounds.X + _bounds.Width - 1, _bounds.Y + 1);
+            }
+        }
+        public Vector2 BottomLeft
+        {
+            get
+            {
+                return new Vector2(_bounds.X + 1, _bounds.Y + _bounds.Height - 1);
+            }
+        }
+        public Vector2 BottomRight
+        {
+            get
+            {
+                return new Vector2(_bounds.X + _bounds.Width - 1, _bounds.Y + _bounds.Height - 1);
+            }
         }
     }
 }

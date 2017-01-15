@@ -36,8 +36,8 @@ namespace Mars
             this.IsFixedTimeStep = Settings.IsFixedTimestep;
 
             // Set the resolution
-            this.GRAPHICS.PreferredBackBufferWidth = Settings.X_resolution;
-            this.GRAPHICS.PreferredBackBufferHeight = Settings.Y_resolution;
+            this.GRAPHICS.PreferredBackBufferWidth = Settings.ResolutionX;
+            this.GRAPHICS.PreferredBackBufferHeight = Settings.ResolutionY;
 
             // Adjust window mode
             if (Settings.WindowMode == WindowMode.Fullscreen)
